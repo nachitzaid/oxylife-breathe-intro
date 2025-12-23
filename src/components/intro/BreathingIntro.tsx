@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import Lungs from './Lungs';
+import RealisticLungs from './RealisticLungs';
 import ECGLine from './ECGLine';
 import MistEffect from './MistEffect';
 import AirParticles from './AirParticles';
-import oxylifeLogo from '@/assets/oxylife-logo.svg';
+import AnimatedLogo from './AnimatedLogo';
 
 interface BreathingIntroProps {
   onComplete: () => void;
@@ -23,6 +23,7 @@ const BreathingIntro = ({ onComplete, onSkip }: BreathingIntroProps) => {
   
   const [currentScene, setCurrentScene] = useState(0);
   const [showParticles, setShowParticles] = useState(false);
+  const [animateLogo, setAnimateLogo] = useState(false);
   
   useEffect(() => {
     if (!containerRef.current) return;
@@ -39,8 +40,8 @@ const BreathingIntro = ({ onComplete, onSkip }: BreathingIntroProps) => {
     })
     .set(lungsRef.current, { 
       opacity: 0,
-      scale: 0.9,
-      filter: 'blur(10px)',
+      scale: 0.85,
+      filter: 'blur(15px)',
     });
     
     // SCENE 1 - "Respirer..." (0.5-3s)
@@ -64,7 +65,7 @@ const BreathingIntro = ({ onComplete, onSkip }: BreathingIntroProps) => {
       opacity: 1,
       scale: 1,
       filter: 'blur(0px)',
-      duration: 1.5,
+      duration: 1.8,
       ease: 'expo.out',
       onStart: () => setCurrentScene(2),
     }, 3)
@@ -74,40 +75,42 @@ const BreathingIntro = ({ onComplete, onSkip }: BreathingIntroProps) => {
       duration: 0.8,
       ease: 'power2.in',
     }, 3.5)
+    // Realistic breathing - expansion
     .to(lungsRef.current, {
-      scale: 1.08,
-      duration: 2,
-      ease: 'power2.inOut',
+      scale: 1.06,
+      duration: 2.5,
+      ease: 'power1.inOut',
     }, 4);
     
     // SCENE 3 - Apnée/Freeze (5-7s)
     tl.to(lungsRef.current, {
       duration: 0.5,
       onStart: () => setCurrentScene(3),
-    }, 6)
-    .to(lungsRef.current, {
-      filter: 'blur(3px) brightness(0.8)',
-      duration: 1,
-      ease: 'power2.in',
     }, 6.5)
     .to(lungsRef.current, {
-      x: -1,
-      repeat: 8,
+      filter: 'blur(2px) brightness(0.85) saturate(0.7)',
+      duration: 1,
+      ease: 'power2.in',
+    }, 7)
+    // Subtle distress tremor
+    .to(lungsRef.current, {
+      x: -1.5,
+      repeat: 10,
       yoyo: true,
-      duration: 0.04,
+      duration: 0.05,
       ease: 'none',
-    }, 7);
+    }, 7.5);
     
     // SCENE 4 - Danger Text (7-10s)
     tl.to(dangerTextRef.current, {
       opacity: 1,
       duration: 0.1,
       onStart: () => setCurrentScene(4),
-    }, 7.5)
+    }, 8)
     .fromTo(dangerTextRef.current, 
       { clipPath: 'inset(100% 0 0 0)' },
       { clipPath: 'inset(0% 0 0 0)', duration: 1.5, ease: 'power4.out' },
-      7.5
+      8
     )
     .to(dangerTextRef.current, {
       x: -2,
@@ -115,26 +118,26 @@ const BreathingIntro = ({ onComplete, onSkip }: BreathingIntroProps) => {
       yoyo: true,
       duration: 0.05,
       ease: 'none',
-    }, 8.5);
+    }, 9);
     
     // SCENE 5 - Urgence/Flash + ECG (10-12s)
     tl.to(flashRef.current, {
-      opacity: 0.3,
-      duration: 0.2,
+      opacity: 0.25,
+      duration: 0.15,
       onStart: () => setCurrentScene(5),
     }, 10)
     .to(flashRef.current, {
       opacity: 0,
-      duration: 0.2,
-    }, 10.2)
+      duration: 0.15,
+    }, 10.15)
     .to(flashRef.current, {
-      opacity: 0.25,
-      duration: 0.2,
-    }, 10.5)
+      opacity: 0.2,
+      duration: 0.15,
+    }, 10.4)
     .to(flashRef.current, {
       opacity: 0,
-      duration: 0.2,
-    }, 10.7)
+      duration: 0.15,
+    }, 10.55)
     .to(ecgRef.current, {
       opacity: 1,
       duration: 0.5,
@@ -148,14 +151,14 @@ const BreathingIntro = ({ onComplete, onSkip }: BreathingIntroProps) => {
       opacity: 0,
       duration: 0.8,
       ease: 'power2.in',
-    }, 11.5);
+    }, 11.8);
     
     // SCENE 6 - Soulagement (12-14s)
     tl.to(lungsRef.current, {
       scale: 1,
-      filter: 'blur(0px) brightness(1)',
+      filter: 'blur(0px) brightness(1) saturate(1)',
       x: 0,
-      duration: 2,
+      duration: 2.5,
       ease: 'expo.inOut',
       onStart: () => {
         setCurrentScene(6);
@@ -163,48 +166,32 @@ const BreathingIntro = ({ onComplete, onSkip }: BreathingIntroProps) => {
       },
     }, 12);
     
-    // SCENE 7 - Logo qui respire (14-18s)
+    // SCENE 7 - Logo textuel animé (14-18s)
     tl.to(lungsRef.current, {
       opacity: 0,
       scale: 0.9,
-      duration: 1,
+      filter: 'blur(8px)',
+      duration: 1.2,
       ease: 'power2.in',
-    }, 14)
+    }, 14.5)
     .to(logoRef.current, {
       opacity: 1,
-      scale: 1,
-      filter: 'blur(0px)',
-      duration: 2,
-      ease: 'expo.out',
-      onStart: () => setCurrentScene(7),
-    }, 14.5)
-    .from(logoRef.current, {
-      scale: 0.85,
-      filter: 'blur(8px)',
-      duration: 2,
-      ease: 'expo.out',
-    }, 14.5)
-    // Logo breathing effect
-    .to(logoRef.current, {
-      scale: 1.02,
-      duration: 1.2,
-      ease: 'power2.inOut',
-    }, 16)
-    .to(logoRef.current, {
-      scale: 1,
-      duration: 1,
-      ease: 'power2.out',
-    }, 17.2)
-    // Slogan appears on "expiration"
+      duration: 0.1,
+      onStart: () => {
+        setCurrentScene(7);
+        setAnimateLogo(true);
+      },
+    }, 15)
+    // Slogan appears smoothly
     .to(sloganRef.current, {
       opacity: 1,
       y: 0,
-      duration: 1.2,
+      duration: 1.5,
       ease: 'power2.out',
     }, 17)
     .from(sloganRef.current, {
-      y: 15,
-      duration: 1.2,
+      y: 20,
+      duration: 1.5,
       ease: 'power2.out',
     }, 17);
     
@@ -222,14 +209,14 @@ const BreathingIntro = ({ onComplete, onSkip }: BreathingIntroProps) => {
       <MistEffect />
       
       {/* Air particles (appear in relief scene) */}
-      <AirParticles isActive={showParticles} count={25} />
+      <AirParticles isActive={showParticles} count={30} />
       
       {/* Danger flash overlay */}
       <div
         ref={flashRef}
         className="absolute inset-0 pointer-events-none opacity-0"
         style={{
-          background: 'linear-gradient(90deg, transparent 0%, hsl(0 70% 55% / 0.3) 30%, hsl(200 70% 55% / 0.2) 70%, transparent 100%)',
+          background: 'linear-gradient(90deg, transparent 0%, hsl(0 60% 50% / 0.25) 30%, hsl(200 60% 50% / 0.15) 70%, transparent 100%)',
         }}
       />
       
@@ -247,10 +234,10 @@ const BreathingIntro = ({ onComplete, onSkip }: BreathingIntroProps) => {
           Respirer...
         </div>
         
-        {/* Scene 2-3: Lungs */}
-        <Lungs
+        {/* Scene 2-3: Realistic Lungs */}
+        <RealisticLungs
           ref={lungsRef}
-          className="absolute w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80"
+          className="absolute w-64 h-72 md:w-80 md:h-96 lg:w-96 lg:h-[28rem]"
         />
         
         {/* Scene 4: Danger text */}
@@ -260,19 +247,25 @@ const BreathingIntro = ({ onComplete, onSkip }: BreathingIntroProps) => {
         >
           <span 
             className="text-3xl md:text-5xl lg:text-6xl font-outfit font-semibold"
-            style={{ color: 'hsl(0 70% 60%)' }}
+            style={{ 
+              color: 'hsl(0 65% 55%)',
+              textShadow: '0 0 30px hsl(0 65% 55% / 0.4)',
+            }}
           >
             Apnée
           </span>
           <span 
             className="text-xl md:text-3xl font-outfit font-light"
-            style={{ color: 'hsl(0 50% 70%)' }}
+            style={{ color: 'hsl(0 40% 65%)' }}
           >
             du
           </span>
           <span 
             className="text-3xl md:text-5xl lg:text-6xl font-outfit font-semibold"
-            style={{ color: 'hsl(0 70% 60%)' }}
+            style={{ 
+              color: 'hsl(0 65% 55%)',
+              textShadow: '0 0 30px hsl(0 65% 55% / 0.4)',
+            }}
           >
             sommeil
           </span>
@@ -284,30 +277,25 @@ const BreathingIntro = ({ onComplete, onSkip }: BreathingIntroProps) => {
           className="absolute w-80 md:w-[500px] lg:w-[600px] h-24 opacity-0"
         />
         
-        {/* Scene 7: Logo */}
+        {/* Scene 7: Animated Text Logo */}
         <div
           ref={logoRef}
           className="absolute flex flex-col items-center opacity-0"
-          style={{ filter: 'blur(8px)' }}
         >
-          <img 
-            src={oxylifeLogo} 
-            alt="OxyLife" 
-            className="w-64 md:w-80 lg:w-96 h-auto"
-            style={{
-              filter: 'drop-shadow(0 0 30px hsl(187 60% 55% / 0.4))',
-            }}
-          />
+          <AnimatedLogo animate={animateLogo} />
         </div>
         
         {/* Slogan */}
         <div
           ref={sloganRef}
-          className="absolute mt-48 md:mt-56 lg:mt-64 text-center opacity-0"
+          className="absolute mt-44 md:mt-52 lg:mt-60 text-center opacity-0"
         >
           <p 
             className="text-lg md:text-xl lg:text-2xl font-outfit font-light tracking-wide"
-            style={{ color: 'hsl(200 20% 75%)' }}
+            style={{ 
+              color: 'hsl(200 20% 75%)',
+              textShadow: '0 0 20px hsl(187 60% 55% / 0.2)',
+            }}
           >
             Respirez mieux. Vivez mieux.
           </p>
@@ -328,7 +316,7 @@ const BreathingIntro = ({ onComplete, onSkip }: BreathingIntroProps) => {
         Passer l'intro →
       </button>
       
-      {/* Scene indicator (subtle) */}
+      {/* Scene indicator */}
       <div className="absolute bottom-8 left-8 z-20 flex gap-1.5">
         {[1, 2, 3, 4, 5, 6, 7].map((scene) => (
           <div
