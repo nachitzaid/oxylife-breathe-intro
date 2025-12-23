@@ -1,96 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* OxyLife Breathing Theme - Deep Blues & Healing Teals */
+    --background: 220 25% 6%;
+    --foreground: 200 20% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 220 25% 8%;
+    --card-foreground: 200 20% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 220 25% 8%;
+    --popover-foreground: 200 20% 95%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary: Deep healing teal */
+    --primary: 187 60% 55%;
+    --primary-foreground: 220 25% 6%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary: Soft blue */
+    --secondary: 210 30% 15%;
+    --secondary-foreground: 200 20% 90%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 20% 12%;
+    --muted-foreground: 210 15% 55%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent: Vibrant cyan */
+    --accent: 187 80% 60%;
+    --accent-foreground: 220 25% 6%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 210 20% 18%;
+    --input: 210 20% 18%;
+    --ring: 187 60% 55%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Custom OxyLife tokens */
+    --breath-glow: 187 80% 60%;
+    --danger: 0 65% 55%;
+    --danger-glow: 0 70% 60%;
+    --mist: 210 30% 85%;
+    --deep-navy: 220 30% 4%;
+    --healing-blue: 200 60% 50%;
+    
+    /* Gradients */
+    --gradient-breath: linear-gradient(135deg, hsl(187 60% 55%), hsl(200 60% 50%));
+    --gradient-danger: linear-gradient(135deg, hsl(0 65% 55%), hsl(30 70% 50%));
+    --gradient-calm: linear-gradient(180deg, hsl(220 25% 6%), hsl(220 30% 12%));
+    --gradient-mist: radial-gradient(ellipse at center, hsl(210 30% 85% / 0.1), transparent 70%);
+    
+    /* Shadows */
+    --shadow-breath: 0 0 60px hsl(187 80% 60% / 0.3);
+    --shadow-danger: 0 0 40px hsl(0 70% 60% / 0.4);
+    --shadow-glow: 0 0 100px hsl(187 60% 55% / 0.2);
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Timing */
+    --breath-duration: 3s;
+    --pulse-duration: 2s;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --background: 220 25% 6%;
+    --foreground: 200 20% 95%;
   }
 }
 
@@ -99,7 +75,128 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Outfit', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  /* Breathing animation classes */
+  .breath-text {
+    @apply text-foreground/90;
+    text-shadow: 0 0 30px hsl(var(--breath-glow) / 0.5);
+  }
+
+  .mist-overlay {
+    background: var(--gradient-mist);
+  }
+
+  .danger-flash {
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      hsl(var(--danger) / 0.15) 50%, 
+      transparent 100%
+    );
+  }
+
+  .ecg-line {
+    stroke: hsl(var(--danger));
+    stroke-width: 2;
+    fill: none;
+    filter: drop-shadow(0 0 8px hsl(var(--danger-glow) / 0.6));
+  }
+
+  .lung-glow {
+    filter: drop-shadow(0 0 40px hsl(var(--breath-glow) / 0.4));
+  }
+
+  .breath-pulse {
+    animation: breathPulse var(--pulse-duration) ease-in-out infinite;
+  }
+
+  .particle {
+    @apply absolute rounded-full;
+    background: hsl(var(--breath-glow) / 0.6);
+    filter: blur(1px);
+  }
+}
+
+@layer utilities {
+  .text-breath-gradient {
+    background: var(--gradient-breath);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-deep-navy {
+    background-color: hsl(var(--deep-navy));
+  }
+
+  .shadow-breath {
+    box-shadow: var(--shadow-breath);
+  }
+
+  .shadow-danger {
+    box-shadow: var(--shadow-danger);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+}
+
+/* Keyframes */
+@keyframes breathPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px);
+  }
+  50% {
+    transform: translateY(-10px) translateX(-5px);
+  }
+  75% {
+    transform: translateY(-25px) translateX(5px);
+  }
+}
+
+@keyframes mistFlow {
+  0% {
+    transform: translateX(-100%) scale(1.2);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateX(100%) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes ecgPulse {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
   }
 }
