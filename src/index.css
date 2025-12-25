@@ -200,3 +200,21 @@
     stroke-dashoffset: 0;
   }
 }
+
+/* Animated Scroll Sections Styles */
+.animated-scroll-sections {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.animated-scroll-sections section {
+  will-change: transform, opacity;
+  min-height: 100vh;
+}
+
+/* Styles pour les caractères animés des titres */
+.gsap-char {
+  will-change: transform, opacity;
+}

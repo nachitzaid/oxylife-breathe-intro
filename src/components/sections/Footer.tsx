@@ -1,23 +1,24 @@
 import { motion } from 'framer-motion';
+import OxylifeLogo from '@/components/ui/OxylifeLogo';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const footerLinks = {
   services: [
-    { label: 'Appareils CPAP', href: '#' },
-    { label: 'Masques Respiratoires', href: '#' },
-    { label: 'Oxygénothérapie', href: '#' },
-    { label: 'Diagnostic', href: '#' },
+    { label: 'Installation', href: '#services' },
+    { label: 'Formation', href: '#services' },
+    { label: 'Entretien', href: '#services' },
+    { label: 'Réparations', href: '#services' },
+  ],
+  products: [
+    { label: 'Oxygène liquide', href: '#products' },
+    { label: 'Concentrateurs', href: '#products' },
+    { label: 'PPC', href: '#products' },
+    { label: 'VNI', href: '#products' },
   ],
   company: [
-    { label: 'À propos', href: '#' },
-    { label: 'Notre équipe', href: '#' },
-    { label: 'Partenaires', href: '#' },
-    { label: 'Carrières', href: '#' },
-  ],
-  support: [
-    { label: 'Contact', href: '#' },
-    { label: 'FAQ', href: '#' },
-    { label: 'Guide d\'utilisation', href: '#' },
-    { label: 'Urgences', href: '#' },
+    { label: 'À propos', href: '#about' },
+    { label: 'Notre équipe', href: '#team' },
+    { label: 'Contact', href: '#contact' },
   ],
 };
 
@@ -29,6 +30,8 @@ const socialLinks = [
 ];
 
 const Footer = () => {
+  const { t } = useLanguage();
+
   return (
     <footer className="pt-20 pb-8 px-6 relative overflow-hidden">
       {/* Top border gradient */}
@@ -49,13 +52,15 @@ const Footer = () => {
               viewport={{ once: true }}
               className="mb-6"
             >
-              <h3 className="text-3xl font-outfit font-bold">
-                <span style={{ color: 'hsl(187 60% 55%)' }}>Oxy</span>
-                <span className="text-foreground">Life</span>
-              </h3>
-              <p className="text-sm text-muted-foreground font-outfit mt-1">
-                Respire Air
-              </p>
+              {/* Animated logo */}
+              <motion.div
+                className="mb-4"
+                animate={{ scale: [1, 1.02, 1] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ color: 'hsl(200 20% 95%)' }}
+              >
+                <OxylifeLogo className="h-16 w-auto" animate={true} />
+              </motion.div>
             </motion.div>
 
             <p className="text-muted-foreground font-outfit text-sm leading-relaxed mb-6 max-w-sm">
@@ -107,11 +112,11 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Company */}
+          {/* Products */}
           <div>
-            <h4 className="font-outfit font-semibold text-foreground mb-4">Entreprise</h4>
+            <h4 className="font-outfit font-semibold text-foreground mb-4">Produits</h4>
             <ul className="space-y-3">
-              {footerLinks.company.map((link, index) => (
+              {footerLinks.products.map((link, index) => (
                 <motion.li
                   key={index}
                   initial={{ opacity: 0, x: -10 }}
@@ -130,11 +135,11 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Company */}
           <div>
-            <h4 className="font-outfit font-semibold text-foreground mb-4">Support</h4>
+            <h4 className="font-outfit font-semibold text-foreground mb-4">Entreprise</h4>
             <ul className="space-y-3">
-              {footerLinks.support.map((link, index) => (
+              {footerLinks.company.map((link, index) => (
                 <motion.li
                   key={index}
                   initial={{ opacity: 0, x: -10 }}
@@ -160,7 +165,7 @@ const Footer = () => {
           style={{ borderTop: '1px solid hsl(210 20% 15%)' }}
         >
           <p className="text-sm text-muted-foreground font-outfit">
-            © {new Date().getFullYear()} OxyLife Maroc. Tous droits réservés.
+            © {new Date().getFullYear()} OxyLife Maroc. {t('footer.copyright')}.
           </p>
 
           <div className="flex gap-6">
@@ -168,13 +173,13 @@ const Footer = () => {
               href="#"
               className="text-sm text-muted-foreground hover:text-breath-light font-outfit transition-colors"
             >
-              Politique de confidentialité
+              {t('footer.privacy')}
             </a>
             <a
               href="#"
               className="text-sm text-muted-foreground hover:text-breath-light font-outfit transition-colors"
             >
-              Mentions légales
+              {t('footer.legal')}
             </a>
           </div>
         </div>

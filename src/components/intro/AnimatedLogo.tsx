@@ -1,5 +1,6 @@
-import { forwardRef, useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { forwardRef } from 'react';
+import { motion } from 'framer-motion';
+import RespirAirLogo from './RespirAirLogo';
 
 interface AnimatedLogoProps {
   className?: string;
@@ -8,104 +9,83 @@ interface AnimatedLogoProps {
 
 const AnimatedLogo = forwardRef<HTMLDivElement, AnimatedLogoProps>(
   ({ className, animate = false }, ref) => {
-    const lettersRef = useRef<(HTMLSpanElement | null)[]>([]);
-    const taglineRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-      if (!animate) return;
-
-      const tl = gsap.timeline();
-
-      // Animate each letter with stagger
-      tl.fromTo(
-        lettersRef.current.filter(Boolean),
-        {
-          opacity: 0,
-          y: 40,
-          rotateX: -90,
-          filter: 'blur(10px)',
-        },
-        {
-          opacity: 1,
-          y: 0,
-          rotateX: 0,
-          filter: 'blur(0px)',
-          duration: 0.8,
-          stagger: 0.08,
-          ease: 'back.out(1.7)',
-        }
-      );
-
-      // Add breathing pulse after letters appear
-      tl.to(lettersRef.current.filter(Boolean), {
-        scale: 1.02,
-        duration: 1.2,
-        ease: 'power2.inOut',
-        stagger: 0.02,
-      }).to(lettersRef.current.filter(Boolean), {
+    const containerVariants = {
+      hidden: {
+        opacity: 0,
+        scale: 0.8,
+        filter: 'blur(20px)',
+      },
+      visible: {
+        opacity: 1,
         scale: 1,
-        duration: 1,
-        ease: 'power2.out',
-        stagger: 0.02,
-      });
+        filter: 'blur(0px)',
+        transition: {
+          duration: 1.2,
+          ease: [0.16, 1, 0.3, 1], // Custom easing for smooth entrance
+        },
+      },
+    };
 
-      return () => {
-        tl.kill();
-      };
-    }, [animate]);
+    const breathingVariants = {
+      breathe: {
+        scale: [1, 1.03, 1],
+        filter: [
+          'drop-shadow(0 0 20px rgba(80, 190, 204, 0.4))',
+          'drop-shadow(0 0 40px rgba(80, 190, 204, 0.6))',
+          'drop-shadow(0 0 20px rgba(80, 190, 204, 0.4))',
+        ],
+        transition: {
+          duration: 3,
+          ease: 'easeInOut',
+          repeat: Infinity,
+          repeatType: 'reverse' as const,
+        },
+      },
+    };
 
-    const logoText = 'OxyLife';
-    const letters = logoText.split('');
+    const pathVariants = {
+      hidden: {
+        pathLength: 0,
+        opacity: 0,
+      },
+      visible: {
+        pathLength: 1,
+        opacity: 1,
+        transition: {
+          pathLength: {
+            duration: 2,
+            ease: 'easeInOut',
+          },
+          opacity: {
+            duration: 0.5,
+          },
+        },
+      },
+    };
 
     return (
-      <div ref={ref} className={className}>
-        <div
-          className="flex items-center justify-center gap-0 perspective-1000"
-          style={{ perspective: '1000px' }}
+      <motion.div
+        ref={ref}
+        className={className}
+        variants={containerVariants}
+        initial="hidden"
+        animate={animate ? 'visible' : 'hidden'}
+      >
+        <motion.div
+          variants={breathingVariants}
+          animate={animate ? 'breathe' : 'visible'}
+          className="flex items-center justify-center"
         >
-          {letters.map((letter, index) => {
-            const isOxy = index < 3;
-            return (
-              <span
-                key={index}
-                ref={(el) => (lettersRef.current[index] = el)}
-                className="inline-block font-outfit font-bold text-6xl md:text-7xl lg:text-8xl"
-                style={{
-                  color: isOxy ? 'hsl(187, 60%, 55%)' : 'hsl(200, 20%, 90%)',
-                  textShadow: isOxy
-                    ? '0 0 40px hsl(187 60% 55% / 0.5), 0 0 80px hsl(187 60% 55% / 0.3)'
-                    : '0 0 30px hsl(200 20% 90% / 0.3)',
-                  transformStyle: 'preserve-3d',
-                  opacity: animate ? 0 : 1,
-                }}
-              >
-                {letter}
-              </span>
-            );
-          })}
-        </div>
-
-        {/* Decorative underline */}
-        <div
-          className="mt-4 mx-auto h-0.5 rounded-full"
-          style={{
-            width: '60%',
-            background:
-              'linear-gradient(90deg, transparent, hsl(187 60% 55% / 0.6), hsl(187 60% 55%), hsl(187 60% 55% / 0.6), transparent)',
-            boxShadow: '0 0 20px hsl(187 60% 55% / 0.4)',
-          }}
-        />
-
-        {/* Oxygen molecule hint */}
-        <div className="flex justify-center mt-3 gap-4 opacity-50">
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <circle cx="8" cy="12" r="6" fill="none" stroke="hsl(187, 60%, 55%)" strokeWidth="1" />
-            <circle cx="16" cy="12" r="6" fill="none" stroke="hsl(187, 60%, 55%)" strokeWidth="1" />
-            <text x="6" y="14" fontSize="6" fill="hsl(187, 60%, 55%)" fontFamily="Arial">O</text>
-            <text x="14" y="14" fontSize="6" fill="hsl(187, 60%, 55%)" fontFamily="Arial">₂</text>
-          </svg>
-        </div>
-      </div>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          >
+            <RespirAirLogo
+              className="w-64 h-auto md:w-80 lg:w-96"
+            />
+          </motion.div>
+        </motion.div>
+      </motion.div>
     );
   }
 );

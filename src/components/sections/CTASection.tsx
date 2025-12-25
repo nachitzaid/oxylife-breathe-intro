@@ -1,5 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { Button } from '@/components/ui/button';
 
 const CTASection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -104,37 +105,33 @@ const CTASection = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <motion.button
-                whileHover={{ scale: 1.05, boxShadow: '0 0 60px hsl(187 60% 55% / 0.5)' }}
-                whileTap={{ scale: 0.98 }}
-                className="px-10 py-5 rounded-full font-outfit font-semibold text-lg"
-                style={{
-                  background: 'linear-gradient(135deg, hsl(187 70% 50%), hsl(200 60% 45%))',
-                  color: 'hsl(220 30% 8%)',
-                  boxShadow: '0 0 40px hsl(187 60% 55% / 0.4)',
+              <Button
+                size="lg"
+                className="px-10 py-6 text-lg font-outfit font-semibold rounded-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground shadow-lg shadow-primary/30"
+                onClick={() => {
+                  const contactSection = document.getElementById('contact');
+                  contactSection?.scrollIntoView({ behavior: 'smooth' });
                 }}
               >
                 Prendre rendez-vous
-              </motion.button>
+              </Button>
 
-              <motion.a
-                href="tel:+212600000000"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-3 px-8 py-5 rounded-full font-outfit font-medium text-lg"
-                style={{
-                  background: 'hsl(220 25% 15%)',
-                  color: 'hsl(187 60% 65%)',
-                }}
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="px-8 py-6 text-lg font-outfit font-medium rounded-full border-primary/50 hover:bg-primary/10"
               >
-                <motion.span
-                  animate={{ rotate: [0, 15, -15, 0] }}
-                  transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
-                >
-                  📞
-                </motion.span>
-                +212 6 00 00 00 00
-              </motion.a>
+                <a href="tel:+212600000000" className="flex items-center gap-3">
+                  <motion.span
+                    animate={{ rotate: [0, 15, -15, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+                  >
+                    📞
+                  </motion.span>
+                  +212 6 00 00 00 00
+                </a>
+              </Button>
             </div>
           </motion.div>
 

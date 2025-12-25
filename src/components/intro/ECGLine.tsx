@@ -76,6 +76,7 @@ const ECGLine = forwardRef<SVGSVGElement, ECGLineProps>(({ className }, ref) => 
           strokeDasharray: 1000,
           strokeDashoffset: 1000,
         }}
+        className="ecg-path"
       />
     </svg>
   );

@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import BreathingIntro from '@/components/intro/BreathingIntro';
 import Navbar from '@/components/layout/Navbar';
+import ScrollIndicator from '@/components/layout/ScrollIndicator';
 import HeroSection from '@/components/sections/HeroSection';
 import ServicesSection from '@/components/sections/ServicesSection';
+import ProductsSection from '@/components/sections/ProductsSection';
 import StatsSection from '@/components/sections/StatsSection';
 import AboutSection from '@/components/sections/AboutSection';
 import CTASection from '@/components/sections/CTASection';
@@ -50,20 +52,24 @@ const Index = () => {
       </AnimatePresence>
 
       {/* Main content */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: introCompleted ? 1 : 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        className="min-h-screen bg-background"
-      >
-        <Navbar />
-        <HeroSection />
-        <ServicesSection />
-        <StatsSection />
-        <AboutSection />
-        <CTASection />
-        <Footer />
-      </motion.div>
+      {introCompleted && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="min-h-screen bg-background"
+        >
+          <Navbar />
+          <ScrollIndicator />
+          <HeroSection />
+          <ServicesSection />
+          <ProductsSection />
+          <StatsSection />
+          <AboutSection />
+          <CTASection />
+          <Footer />
+        </motion.div>
+      )}
     </>
   );
 };
