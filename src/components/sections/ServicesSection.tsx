@@ -1,143 +1,117 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import MagneticCursor from '@/components/ui/MagneticCursor';
-import { useLanguage } from '@/contexts/LanguageContext';
-import ScrollReveal from '@/components/ui/ScrollReveal';
-import WordReveal from '@/components/ui/WordReveal';
-import { useParallax } from '@/hooks/useScrollReveal';
+
+// Icon components using inline SVG
+const InstallIcon = () => (
+  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2v20M2 12h20M12 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4M12 14a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
+  </svg>
+);
+
+const TrainingIcon = () => (
+  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="6" r="3" />
+    <path d="M12 9c-3 0-6 2-6 5v5h12v-5c0-3-3-5-6-5" />
+    <path d="M4 20h16" />
+  </svg>
+);
+
+const MaintenanceIcon = () => (
+  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 4v4M12 16v4M20 12h-4M8 12H4M18.36 5.64l-2.83 2.83M8.47 15.53l-2.83 2.83M18.36 18.36l-2.83-2.83M8.47 8.47l-2.83-2.83" />
+  </svg>
+);
+
+const RepairIcon = () => (
+  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M7.5 2h9l1.5 3v2h-12v-2l1.5-3z" />
+    <path d="M2 7h20v12H2z" />
+    <path d="M6 15h12M8 11h8" />
+  </svg>
+);
+
+const PackageIcon = () => (
+  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="16.5" y1="9.4" x2="7.5" y2="4.21" />
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+    <line x1="12" y1="22.08" x2="12" y2="12" />
+  </svg>
+);
+
+const EvaluationIcon = () => (
+  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 11l3 3L22 4" />
+    <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+);
 
 const services = [
   {
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-12 h-12">
-        <defs>
-          <linearGradient id="install-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="hsl(187, 70%, 55%)" />
-            <stop offset="100%" stopColor="hsl(200, 60%, 45%)" />
-          </linearGradient>
-        </defs>
-        <rect x="12" y="20" width="40" height="32" rx="4" fill="none" stroke="url(#install-grad)" strokeWidth="2" />
-        <path d="M20 28 L28 20 L36 28 M28 20 L28 40" stroke="url(#install-grad)" strokeWidth="2" strokeLinecap="round" />
-        <circle cx="44" cy="36" r="4" fill="url(#install-grad)" opacity="0.5" />
-      </svg>
-    ),
+    Icon: InstallIcon,
     title: 'Installation de dispositifs médicaux',
     description: 'Installation professionnelle et sécurisée de tous vos équipements respiratoires à domicile.',
     features: ['À domicile', 'Professionnel', 'Sécurisé'],
+    color: 'from-blue-500 to-cyan-500',
+    shadowColor: '#0891b2',
+    lightColor: 'rgba(6, 182, 212, 0.1)',
   },
   {
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-12 h-12">
-        <defs>
-          <linearGradient id="training-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="hsl(187, 70%, 55%)" />
-            <stop offset="100%" stopColor="hsl(200, 60%, 45%)" />
-          </linearGradient>
-        </defs>
-        <circle cx="32" cy="28" r="12" fill="none" stroke="url(#training-grad)" strokeWidth="2" />
-        <path d="M20 40 L32 48 L44 40" stroke="url(#training-grad)" strokeWidth="2" strokeLinecap="round" />
-        <path d="M24 52 L32 48 L40 52" stroke="url(#training-grad)" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
+    Icon: TrainingIcon,
     title: 'Formation des patients et des partenaires',
     description: 'Formation complète sur l\'utilisation et l\'entretien de vos équipements respiratoires.',
     features: ['Complète', 'Personnalisée', 'Suivi'],
+    color: 'from-cyan-500 to-teal-500',
+    shadowColor: '#14b8a6',
+    lightColor: 'rgba(20, 184, 166, 0.1)',
   },
   {
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-12 h-12">
-        <defs>
-          <linearGradient id="maintenance-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="hsl(187, 70%, 55%)" />
-            <stop offset="100%" stopColor="hsl(200, 60%, 45%)" />
-          </linearGradient>
-        </defs>
-        <rect x="16" y="18" width="32" height="28" rx="3" fill="none" stroke="url(#maintenance-grad)" strokeWidth="2" />
-        <circle cx="32" cy="32" r="6" fill="none" stroke="url(#maintenance-grad)" strokeWidth="2" />
-        <path d="M26 32 L30 36 L38 26" stroke="url(#maintenance-grad)" strokeWidth="2" strokeLinecap="round" />
-        <path d="M20 50 L44 50" stroke="url(#maintenance-grad)" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
+    Icon: MaintenanceIcon,
     title: 'Entretien préventif des appareils',
     description: 'Maintenance régulière et préventive pour garantir le bon fonctionnement de vos équipements.',
     features: ['Régulier', 'Préventif', 'Garanti'],
+    color: 'from-teal-500 to-emerald-500',
+    shadowColor: '#10b981',
+    lightColor: 'rgba(16, 185, 129, 0.1)',
   },
   {
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-12 h-12">
-        <defs>
-          <linearGradient id="repair-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="hsl(187, 70%, 55%)" />
-            <stop offset="100%" stopColor="hsl(200, 60%, 45%)" />
-          </linearGradient>
-        </defs>
-        <rect x="14" y="20" width="36" height="24" rx="3" fill="none" stroke="url(#repair-grad)" strokeWidth="2" />
-        <path d="M20 28 L28 20 L36 28" stroke="url(#repair-grad)" strokeWidth="2" strokeLinecap="round" />
-        <circle cx="44" cy="32" r="3" fill="url(#repair-grad)" />
-        <path d="M18 48 L46 48" stroke="url(#repair-grad)" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
+    Icon: RepairIcon,
     title: 'Mise à jour / réparations',
     description: 'Mise à jour des logiciels et réparations rapides de vos équipements par nos techniciens experts.',
     features: ['Rapide', 'Expert', 'Garanti'],
+    color: 'from-emerald-500 to-green-500',
+    shadowColor: '#22c55e',
+    lightColor: 'rgba(34, 197, 94, 0.1)',
   },
   {
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-12 h-12">
-        <defs>
-          <linearGradient id="rental-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="hsl(187, 70%, 55%)" />
-            <stop offset="100%" stopColor="hsl(200, 60%, 45%)" />
-          </linearGradient>
-        </defs>
-        <rect x="12" y="16" width="40" height="32" rx="4" fill="none" stroke="url(#rental-grad)" strokeWidth="2" />
-        <path d="M20 24 L32 16 L44 24" stroke="url(#rental-grad)" strokeWidth="2" strokeLinecap="round" />
-        <path d="M20 24 L20 40 L44 40 L44 24" stroke="url(#rental-grad)" strokeWidth="2" />
-        <circle cx="32" cy="32" r="4" fill="url(#rental-grad)" opacity="0.5" />
-      </svg>
-    ),
+    Icon: PackageIcon,
     title: 'Location et vente de dispositifs',
     description: 'Location ou achat de dispositifs médicaux respiratoires adaptés à vos besoins.',
     features: ['Location', 'Vente', 'Adapté'],
+    color: 'from-green-500 to-lime-500',
+    shadowColor: '#84cc16',
+    lightColor: 'rgba(132, 204, 22, 0.1)',
   },
   {
-    icon: (
-      <svg viewBox="0 0 64 64" className="w-12 h-12">
-        <defs>
-          <linearGradient id="eval-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="hsl(187, 70%, 55%)" />
-            <stop offset="100%" stopColor="hsl(200, 60%, 45%)" />
-          </linearGradient>
-        </defs>
-        <rect x="16" y="18" width="32" height="28" rx="3" fill="none" stroke="url(#eval-grad)" strokeWidth="2" />
-        <path d="M24 28 L28 32 L32 28 L36 32 L40 28" stroke="url(#eval-grad)" strokeWidth="2" strokeLinecap="round" />
-        <circle cx="32" cy="40" r="2" fill="url(#eval-grad)" />
-        <path d="M20 50 L44 50" stroke="url(#eval-grad)" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
+    Icon: EvaluationIcon,
     title: 'Évaluation technique à domicile',
     description: 'Évaluation complète de vos besoins respiratoires directement à votre domicile.',
     features: ['À domicile', 'Complète', 'Personnalisée'],
+    color: 'from-lime-500 to-yellow-500',
+    shadowColor: '#eab308',
+    lightColor: 'rgba(234, 179, 8, 0.1)',
   },
 ];
 
 const ServicesSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
-  const { t } = useLanguage();
-  const { y: parallaxY } = useParallax(0.3);
 
   return (
     <section ref={containerRef} className="py-32 px-6 relative overflow-hidden" id="services">
-      {/* Background elements */}
+      {/* Background decoration */}
       <div className="absolute inset-0">
-        <div
-          className="absolute top-0 left-0 w-full h-px"
-          style={{
-            background:
-              'linear-gradient(90deg, transparent, hsl(187 60% 55% / 0.3), transparent)',
-          }}
-        />
         <motion.div
           className="absolute w-[500px] h-[500px] rounded-full"
           style={{
@@ -145,9 +119,11 @@ const ServicesSection = () => {
             top: '20%',
             right: '-10%',
             filter: 'blur(60px)',
-            y: parallaxY,
           }}
-          animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 90, 0],
+          }}
           transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
         />
       </div>
@@ -155,114 +131,141 @@ const ServicesSection = () => {
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Section header */}
         <div className="text-center mb-20">
-          <ScrollReveal direction="scale" delay={0.1}>
-            <motion.span
-              className="inline-block px-4 py-1.5 rounded-full text-sm font-outfit font-medium mb-6"
+          <motion.span
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: 0.2 }}
+            className="inline-block px-4 py-1.5 rounded-full text-sm font-outfit font-medium mb-6"
+            style={{
+              background: 'hsl(187 60% 55% / 0.1)',
+              border: '1px solid hsl(187 60% 55% / 0.2)',
+              color: 'hsl(187 60% 60%)',
+            }}
+          >
+            Nos Services
+          </motion.span>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.3 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-outfit font-bold mb-6"
+          >
+            <span className="text-foreground">Solutions complètes </span>
+            <span
               style={{
-                background: 'hsl(187 60% 55% / 0.1)',
-                border: '1px solid hsl(187 60% 55% / 0.2)',
-                color: 'hsl(187 60% 60%)',
+                background: 'linear-gradient(135deg, hsl(187 70% 55%), hsl(200 60% 50%))',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
               }}
             >
-              {t('services.title')}
-            </motion.span>
-          </ScrollReveal>
+              pour votre bien-être
+            </span>
+          </motion.h2>
 
-          <WordReveal
-            text={t('services.subtitle')}
-            className="text-4xl md:text-5xl lg:text-6xl font-outfit font-bold mb-6 block"
-            stagger={0.06}
-          />
-
-          <ScrollReveal direction="fade" delay={0.3}>
-            <p className="text-lg text-muted-foreground font-outfit max-w-2xl mx-auto">
-              De l'équipement au suivi médical, nous vous accompagnons à chaque étape de votre traitement.
-            </p>
-          </ScrollReveal>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.4 }}
+            className="text-lg text-muted-foreground font-outfit max-w-2xl mx-auto"
+          >
+            De l'équipement au suivi médical, nous vous accompagnons à chaque étape de votre traitement.
+          </motion.p>
         </div>
 
-        {/* Services grid with variants */}
+        {/* Services grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service, index) => (
-            <ScrollReveal
-              key={index}
-              direction="up"
-              delay={index * 0.1}
-            >
-              <MagneticCursor strength={0.15}>
+          {services.map((service, index) => {
+            const Icon = service.Icon;
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                transition={{ delay: index * 0.1, duration: 0.6 }}
+                whileHover={{
+                  y: -10,
+                }}
+                className="h-full p-8 rounded-3xl transition-all duration-500 group cursor-pointer relative overflow-hidden"
+                style={{
+                  background: 'linear-gradient(145deg, hsl(220 25% 10%), hsl(220 25% 8%))',
+                  border: '1px solid hsl(210 20% 15%)',
+                }}
+                onMouseEnter={() => {
+                  // Hover effect handled by whileHover
+                }}
+              >
+                {/* Animated gradient background on hover */}
                 <motion.div
-                  whileHover={{
-                    y: -10,
-                    boxShadow: '0 30px 60px hsl(187 60% 55% / 0.15)',
-                  }}
-                  className="h-full p-8 rounded-3xl transition-all duration-500 group cursor-pointer"
+                  className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-5`}
+                  transition={{ duration: 0.3 }}
+                />
+
+                {/* Icon Container with color accent */}
+                <motion.div
+                  className="mb-6 p-4 rounded-2xl inline-block relative"
                   style={{
-                    background: 'linear-gradient(145deg, hsl(220 25% 10%), hsl(220 25% 8%))',
-                    border: '1px solid hsl(210 20% 15%)',
+                    background: service.lightColor,
+                    border: `2px solid ${service.shadowColor}40`,
+                  }}
+                  whileHover={{
+                    scale: 1.15,
+                    rotate: 10,
+                  }}
+                  animate={{
+                    y: [0, -8, 0],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    delay: index * 0.2,
                   }}
                 >
-                  {/* Icon with breathing animation */}
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    className="mb-6 p-4 rounded-2xl inline-block"
-                    style={{
-                      background: 'hsl(187 60% 55% / 0.1)',
-                      border: '1px solid hsl(187 60% 55% / 0.2)',
-                    }}
-                    animate={{ scale: [1, 1.05, 1] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: index * 0.2 }}
-                  >
-                    {service.icon}
-                  </motion.div>
-
-                  {/* Title */}
-                  <WordReveal
-                    text={service.title}
-                    className="text-xl font-outfit font-semibold mb-3 text-foreground group-hover:text-breath-light transition-colors block"
-                    stagger={0.03}
-                  />
-
-                  {/* Description */}
-                  <ScrollReveal direction="fade" delay={0.2}>
-                    <p className="text-muted-foreground font-outfit text-sm leading-relaxed mb-6">
-                      {service.description}
-                    </p>
-                  </ScrollReveal>
-
-                  {/* Features */}
-                  <div className="flex flex-wrap gap-2">
-                    {service.features.map((feature, i) => (
-                      <ScrollReveal
-                        key={i}
-                        direction="scale"
-                        delay={0.3 + i * 0.1}
-                      >
-                        <motion.span
-                          className="px-3 py-1 rounded-full text-xs font-outfit"
-                          style={{
-                            background: 'hsl(220 25% 15%)',
-                            color: 'hsl(187 60% 65%)',
-                          }}
-                          whileHover={{ scale: 1.1 }}
-                        >
-                          {feature}
-                        </motion.span>
-                      </ScrollReveal>
-                    ))}
+                  <div style={{ color: service.shadowColor }}>
+                    <Icon />
                   </div>
-
-                  {/* Hover line */}
-                  <motion.div
-                    className="mt-6 h-0.5 rounded-full"
-                    style={{ background: 'hsl(187 60% 55% / 0.3)' }}
-                    initial={{ scaleX: 0, originX: 0 }}
-                    whileHover={{ scaleX: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
                 </motion.div>
-              </MagneticCursor>
-            </ScrollReveal>
-          ))}
+
+                {/* Content */}
+                <h3 className="text-xl font-outfit font-semibold mb-3 text-foreground group-hover:text-[hsl(187,60%,65%)] transition-colors relative z-10">
+                  {service.title}
+                </h3>
+
+                <p className="text-muted-foreground font-outfit text-sm leading-relaxed mb-6 relative z-10">
+                  {service.description}
+                </p>
+
+                {/* Features with color dots */}
+                <div className="flex flex-wrap gap-2 mb-6 relative z-10">
+                  {service.features.map((feature, i) => (
+                    <motion.span
+                      key={i}
+                      className="px-3 py-1 rounded-full text-xs font-outfit"
+                      style={{
+                        background: `${service.shadowColor}20`,
+                        border: `1px solid ${service.shadowColor}40`,
+                        color: service.shadowColor,
+                      }}
+                      whileHover={{
+                        scale: 1.1,
+                      }}
+                    >
+                      {feature}
+                    </motion.span>
+                  ))}
+                </div>
+
+                {/* Bottom accent line */}
+                <motion.div
+                  className="h-0.5 w-0 rounded-full group-hover:w-full transition-all duration-300 relative z-10"
+                  style={{
+                    background: service.shadowColor,
+                  }}
+                />
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
