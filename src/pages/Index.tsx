@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import BreathingIntro from '@/components/intro/BreathingIntro';
@@ -11,16 +13,19 @@ import AboutSection from '@/components/sections/AboutSection';
 import CTASection from '@/components/sections/CTASection';
 import Footer from '@/components/sections/Footer';
 
-const Index = () => {
-  const [showIntro, setShowIntro] = useState(true);
+export default function Home() {
+  const [showIntro, setShowIntro] = useState(false); // Par défaut false
   const [introCompleted, setIntroCompleted] = useState(false);
 
-  // Check if user has already seen the intro
   useEffect(() => {
+    // Vérifie si l'utilisateur a déjà vu l'intro (une fois par session)
     const hasSeenIntro = sessionStorage.getItem('oxylife-intro-seen');
+
     if (hasSeenIntro) {
       setShowIntro(false);
       setIntroCompleted(true);
+    } else {
+      setShowIntro(true); // Affiche l'intro seulement la première fois
     }
   }, []);
 
@@ -36,12 +41,15 @@ const Index = () => {
 
   return (
     <>
-      <AnimatePresence>
+      {/* Intro animée */}
+      <AnimatePresence mode="wait">
         {showIntro && (
           <motion.div
+            key="intro"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="fixed inset-0 z-[9999] bg-background"
           >
             <BreathingIntro
               onComplete={handleIntroComplete}
@@ -51,27 +59,32 @@ const Index = () => {
         )}
       </AnimatePresence>
 
-      {/* Main content */}
-      {introCompleted && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="min-h-screen bg-background"
-        >
-          <Navbar />
-          <ScrollIndicator />
-          <HeroSection />
-          <ServicesSection />
-          <ProductsSection />
-          <StatsSection />
-          <AboutSection />
-          <CTASection />
-          <Footer />
-        </motion.div>
-      )}
+      {/* Contenu principal */}
+      <AnimatePresence mode="wait">
+        {introCompleted && (
+          <motion.div
+            key="main-content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="relative min-h-screen bg-background"
+          >
+            <Navbar />
+            <ScrollIndicator />
+
+            <main>
+              <HeroSection />
+              <ServicesSection />
+              <ProductsSection />
+              <StatsSection />
+              <AboutSection />
+              <CTASection />
+            </main>
+
+            <Footer />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
-};
-
-export default Index;
+}

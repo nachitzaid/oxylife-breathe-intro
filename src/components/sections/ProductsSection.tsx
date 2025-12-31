@@ -1,11 +1,13 @@
-
 "use client"
 
-import { AnimatePresence, useScroll, useSpring } from "framer-motion"
+import { AnimatePresence, useScroll,useTransform ,useSpring, motion } from "framer-motion"
 import { useState, useRef } from "react"
 import { products } from "@/data/products"
 import { ProductCard } from "./product-card"
 import { ProductDetailModal } from "./product-detail-modal"
+
+"use client"
+
 
 export default function ProductsSection() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -13,7 +15,7 @@ export default function ProductsSection() {
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start start", "end end"],
+    offset: ["start end", "end start"],
   })
 
   const smoothProgress = useSpring(scrollYProgress, {
@@ -25,30 +27,51 @@ export default function ProductsSection() {
   const selectedProduct = products.find((p) => p.id === selectedId)
 
   return (
-    <section ref={sectionRef} className="relative h-[150vh]" id="products">
-      <div className="sticky top-0 h-[147vh] flex flex-col justify-start pt-16 overflow-hidden px-6 bg-background">
-        <div className="max-w-7xl mx-auto w-full relative">
-          <div className="text-center mb-6">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-              Respirez la <span className="text-primary italic">Liberté.</span>
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Scrollez pour déployer nos solutions respiratoires premium.
-            </p>
-          </div>
+    <section ref={sectionRef} className="relative min-h-[260vh] bg-gradient-to-b from-background via-primary/5 to-background" id="products">
+      {/* Fond animé */}
+      <motion.div 
+        className="absolute inset-0 opacity-30"
+        style={{
+          background: "radial-gradient(circle at 50% 50%, var(--primary) 0%, transparent 70%)",
+          scale: useTransform(smoothProgress, [0, 1], [1.2, 1.8]),
+          opacity: useTransform(smoothProgress, [0, 1], [0, 0.3]),
+        }}
+      />
 
-          <div className="relative h-[900px] flex items-center justify-center">
-            {products.map((product, i) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                index={i}
-                total={products.length}
-                progress={smoothProgress}
-                onClick={() => setSelectedId(product.id)}
-              />
-            ))}
-          </div>
+      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden px-6">
+        <div className="max-w-7xl mx-auto w-full text-center mb-20">
+          <motion.h2
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2 }}
+            className="text-7xl md:text-8xl lg:text-9xl font-black mb-8"
+            style={{
+              textShadow: useTransform(smoothProgress, [0, 0.5], ["0 0 20px rgba(0,0,0,0)", "0 0 60px var(--primary)"]),
+            }}
+          >
+            Respirez la <span className="text-primary italic">Liberté.</span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 1 }}
+            className="text-2xl text-muted-foreground max-w-4xl mx-auto"
+          >
+            Faites défiler pour découvrir nos solutions respiratoires premium
+          </motion.p>
+        </div>
+
+        <div className="relative h-[1600px] flex items-center justify-center">
+          {products.map((product, i) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              index={i}
+              total={products.length}
+              progress={smoothProgress}
+              onClick={() => setSelectedId(product.id)}
+            />
+          ))}
         </div>
       </div>
 
