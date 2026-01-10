@@ -1,60 +1,80 @@
 "use client"
 
-import { motion, type MotionValue, useTransform } from "framer-motion"
+import { motion } from "motion/react"
 import type { Product } from "@/data/products"
 
 interface ProductCardProps {
   product: Product
-  index: number
-  total: number
-  progress: MotionValue<number>
   onClick: () => void
 }
 
-export const ProductCard = ({ product, index, total, progress, onClick }: ProductCardProps) => {
-  const columns = 3
-  const col = index % columns
-  const row = Math.floor(index / columns)
+export const ProductCard = ({ product, onClick }: ProductCardProps) => {
+  const cardVariants = {
+    rest: {
+      scale: 1,
+      y: 0,
+    },
+    hover: {
+      scale: 1.05,
+      y: -12,
+      transition: {
+        type: "spring",
+        stiffness: 350,
+        damping: 25,
+        mass: 0.8,
+      },
+    },
+  }
 
-  const rotate = useTransform(progress, [0, 1], [-15 + (index * 30) / (total - 1), 0])
-  const x = useTransform(progress, [0, 1], [0, (col - 1) * 450])
-  const y = useTransform(progress, [0, 1], [0, row * 520])
-  const scale = useTransform(progress, [0, 1], [0.9, 1])
-  const opacity = useTransform(progress, [0, 0.3], [0.5 + index * 0.1, 1])
+  const imageVariants = {
+    rest: { scale: 1 },
+    hover: { scale: 1.08, transition: { duration: 0.8, ease: "easeOut" } },
+  }
 
   return (
     <motion.div
       layoutId={`card-${product.id}`}
       onClick={onClick}
-      className="group absolute h-[450px] w-[350px] cursor-pointer overflow-hidden rounded-[2.5rem] bg-card border border-border/50 hover:border-primary/40 transition-colors shadow-2xl"
-      style={{
-        zIndex: total - index,
-        x,
-        y,
-        rotate,
-        scale,
-        opacity,
-        left: "50%",
-        top: "50%",
-        marginLeft: "-175px",
-        marginTop: "-225px",
-      }}
-      whileHover={{ scale: 1.02, zIndex: 50 }}
-      transition={{ type: "spring", stiffness: 500, damping: 40 }}
+      className="group relative h-[480px] w-[380px] cursor-pointer overflow-hidden rounded-3xl bg-card border border-border/30 hover:border-primary/60 transition-all shadow-2xl flex-shrink-0"
+      variants={cardVariants}
+      initial="rest"
+      whileHover="hover"
+      whileTap={{ scale: 0.98 }}
     >
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <div className={`absolute inset-0 bg-gradient-to-br ${product.gradient} opacity-20`} />
-        <img
-          src={`/.jpg?height=800&width=800&query=${encodeURIComponent(product.variants[0].image)}`}
+        <motion.img
+          src={`/images/${product.variants[0].image}`}
           alt={product.title}
-          className="h-full w-full object-cover opacity-80 mix-blend-overlay"
+          className="h-full w-full object-cover"
+          variants={imageVariants}
+          initial="rest"
+          whileHover="hover"
+        />
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileHover={{ opacity: 1 }}
+          className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-transparent"
+          transition={{ duration: 0.4 }}
         />
       </div>
 
-      <div className="absolute inset-0 z-10 p-10 flex flex-col justify-end bg-gradient-to-t from-background/90 via-background/40 to-transparent">
-        <h3 className="text-3xl font-bold mb-2 tracking-tight">{product.title}</h3>
-        <p className="text-muted-foreground text-lg font-medium">{product.description}</p>
+      <div className="relative z-10 p-10 flex flex-col justify-end h-full bg-gradient-to-t from-black/90 via-black/40 to-transparent backdrop-blur-sm">
+        <motion.div initial={{ y: 10, opacity: 0 }} whileHover={{ y: 0, opacity: 1 }} transition={{ duration: 0.3 }}>
+          <h3 className="text-4xl font-black mb-3 tracking-tight text-white drop-shadow-lg">{product.title}</h3>
+          <p className="text-lg font-medium text-white/90 drop-shadow-md">{product.description}</p>
+        </motion.div>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        whileHover={{ opacity: 1, y: 0 }}
+        className="absolute top-6 right-6 z-20 bg-primary/90 backdrop-blur-sm text-primary-foreground px-4 py-2 rounded-full text-sm font-bold"
+        transition={{ duration: 0.3 }}
+      >
+        Découvrir →
+      </motion.div>
     </motion.div>
   )
 }

@@ -1,60 +1,50 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
+import { useState, useRef, useEffect } from "react"
 import { X, ShoppingCart, MessageSquare, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import type { Product } from "@/data/products"
-import { useState, useEffect } from "react"
+import { products } from "@/data/products"
+import type { Product, ProductVariant } from "@/data/products"
 
-// Composant Typewriter pour l'effet d'écriture
-const TypewriterText = ({ text }: { text: string }) => {
-  const [displayText, setDisplayText] = useState("")
-  
+// Hook isInView simple
+const useInView = (ref: React.RefObject<HTMLElement>) => {
+  const [isInView, setIsInView] = useState(false)
   useEffect(() => {
-    let i = 0
-    const timer = setInterval(() => {
-      if (i < text.length) {
-        setDisplayText(text.slice(0, i + 1))
-        i++
-      } else {
-        clearInterval(timer)
-      }
-    }, 50)
-    return () => clearInterval(timer)
-  }, [text])
-
-  return <span>{displayText}<span className="animate-pulse">|</span></span>
+    const observer = new IntersectionObserver(([entry]) => setIsInView(entry.isIntersecting), { threshold: 0.1 })
+    if (ref.current) observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [ref])
+  return isInView
 }
 
-interface ProductDetailModalProps {
-  product: Product
-  onClose: () => void
+// ProductCard – ultra clean comme ton exemple
+const ProductCard = ({ product, onClick }: { product: Product; onClick: () => void }) => {
+  return (
+    <motion.div
+      onClick={onClick}
+      className="group relative h-[420px] w-[340px] flex-shrink-0 cursor-pointer overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 to-slate-900 border border-slate-800/50 shadow-2xl"
+      whileHover={{ y: -16, scale: 1.03 }}
+      transition={{ type: "spring", stiffness: 280, damping: 24 }}
+    >
+      <img
+        src={`/images/${product.variants[0].image}`}
+        alt={product.title}
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+      <div className="absolute bottom-0 left-0 right-0 p-8">
+        <h3 className="text-3xl font-bold text-white mb-3">{product.title}</h3>
+        <p className="text-base text-slate-300/90 line-clamp-2">{product.description}</p>
+      </div>
+    </motion.div>
+  )
 }
 
-export const ProductDetailModal = ({ product, onClose }: ProductDetailModalProps) => {
+// Modal simplifiÃ© + couleurs alignÃ©es
+const ProductDetailModal = ({ product, onClose }: { product: Product; onClose: () => void }) => {
   const [activeVariantId, setActiveVariantId] = useState(product.variants[0].id)
-  const activeVariant = product.variants.find((v) => v.id === activeVariantId)
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.3,
-      },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { y: 40, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: "easeOut" } },
-  }
-
-  const buttonVariants = {
-    hidden: { y: 60, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: "backOut" } },
-  }
+  const activeVariant: ProductVariant | undefined = product.variants.find(v => v.id === activeVariantId)
 
   return (
     <>
@@ -63,131 +53,182 @@ export const ProductDetailModal = ({ product, onClose }: ProductDetailModalProps
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 z-[9999] bg-background/90 backdrop-blur-2xl"
+        className="fixed inset-0 z-50 bg-black/75 backdrop-blur-lg"
       />
-      <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6 pointer-events-none overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
         <motion.div
-          layoutId={`card-${product.id}`}
-          className="w-full max-w-7xl max-h-[90vh] overflow-hidden rounded-[3rem] bg-card border border-border shadow-2xl pointer-events-auto flex flex-col lg:flex-row"
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.6 }}
+          initial={{ scale: 0.94, opacity: 0, y: 30 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.94, opacity: 0, y: 30 }}
+          className="w-full max-w-5xl max-h-[90vh] rounded-3xl bg-slate-950 border border-slate-800/60 shadow-2xl overflow-hidden flex flex-col lg:flex-row pointer-events-auto"
         >
-          {/* Image + Miniatures */}
-          <div className="relative flex-1 bg-muted/10 overflow-hidden">
-            <motion.div 
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1 }}
-              className="absolute top-10 left-10 z-20 max-w-md"
-            >
-              <h2 className="text-5xl font-black tracking-tighter mb-3">
-                <TypewriterText text={product.title} />
-              </h2>
-              <p className="text-2xl font-bold text-primary">
-                <TypewriterText text={product.description} />
-              </p>
-            </motion.div>
-
-            <motion.img
-              initial={{ scale: 1.1 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 1.2 }}
-              src={`/images/${activeVariant?.image}`}
-              alt={activeVariant?.title}
-              className="w-full h-full object-contain lg:object-cover"
-            />
-
-            {/* Miniatures avec animation */}
+          {/* Image */}
+          <div className="flex-1 bg-slate-900/50 p-8 flex items-center justify-center relative">
+            {activeVariant && (
+              <motion.img
+                key={activeVariant.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                src={`/images/${activeVariant.image}`}
+                alt={activeVariant.title}
+                className="max-h-[70vh] object-contain"
+              />
+            )}
+            {/* Miniatures */}
             {product.variants.length > 1 && (
-              <motion.div 
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30"
-              >
-                <div className="bg-background/80 backdrop-blur-xl border border-border/50 p-4 rounded-3xl flex gap-4 shadow-2xl">
-                  {product.variants.map((variant, i) => (
-                    <motion.button
-                      key={variant.id}
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 0.7 + i * 0.1 }}
-                      onClick={() => setActiveVariantId(variant.id)}
-                      className={`
-                        w-20 h-20 rounded-2xl overflow-hidden border-4 transition-all
-                        ${activeVariantId === variant.id 
-                          ? "border-primary scale-110 shadow-lg" 
-                          : "border-transparent opacity-70 hover:opacity-100"}
-                      `}
-                    >
-                      <img
-                        src={`/images/${variant.image}`}
-                        alt={variant.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </motion.button>
-                  ))}
-                </div>
-              </motion.div>
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-4 bg-black/60 backdrop-blur-lg p-4 rounded-2xl border border-slate-700/50">
+                {product.variants.map(v => (
+                  <motion.button
+                    key={v.id}
+                    onClick={() => setActiveVariantId(v.id)}
+                    whileHover={{ scale: 1.1 }}
+                    className={`w-16 h-16 rounded-xl overflow-hidden border-2 ${
+                      v.id === activeVariantId ? "border-teal-500 shadow-teal-500/30" : "border-slate-600 opacity-70"
+                    }`}
+                  >
+                    <img src={`/images/${v.image}`} alt="" className="w-full h-full object-cover" />
+                  </motion.button>
+                ))}
+              </div>
             )}
           </div>
 
-          {/* Contenu texte avec animations variées */}
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="w-full lg:w-96 bg-card p-10 flex flex-col border-t lg:border-t-0 lg:border-l border-border/50"
-          >
-            <Button variant="ghost" size="icon" onClick={onClose} className="absolute top-8 right-8 rounded-full z-10">
-              <X className="w-6 h-6" />
-            </Button>
+          {/* Infos */}
+          <div className="flex-1 p-10 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-800/60">
+            <button onClick={onClose} className="absolute top-6 right-6 p-3 rounded-full bg-slate-900/60 border border-slate-700/50">
+              <X className="w-6 h-6 text-slate-300" />
+            </button>
 
-            <div className="flex-1 space-y-8 mt-6 overflow-y-auto">
-              <motion.div variants={itemVariants}>
-                <span className="text-sm font-black text-primary uppercase tracking-widest">Modèle sélectionné</span>
-                <h3 className="text-3xl font-bold mt-1">{activeVariant?.title}</h3>
-              </motion.div>
+            <div className="space-y-8 overflow-y-auto max-h-[calc(90vh-160px)]">
+              {activeVariant && (
+                <>
+                  <div>
+                    <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium"
+                      style={{
+                        background: "hsl(187 60% 55% / 0.12)",
+                        border: "1px solid hsl(187 60% 55% / 0.25)",
+                        color: "hsl(187 60% 75%)",
+                      }}>
+                      Modèle sélectionné
+                    </span>
+                    <h2 className="mt-4 text-4xl md:text-5xl font-bold text-white leading-tight">
+                      {activeVariant.title}
+                    </h2>
+                  </div>
 
-              <motion.p variants={itemVariants} className="text-muted-foreground text-lg leading-relaxed">
-                {activeVariant?.description}
-              </motion.p>
+                  <p className="text-lg text-slate-300 leading-relaxed">{activeVariant.description}</p>
 
-              <motion.div variants={itemVariants} className="space-y-4">
-                <h4 className="font-semibold text-xl">Caractéristiques principales</h4>
-                {product.features.map((feature, i) => (
-                  <motion.div
-                    key={i}
-                    variants={itemVariants}
-                    className="flex items-center gap-3 text-muted-foreground"
-                  >
-                    <ChevronRight className="w-5 h-5 text-primary" />
-                    <span>{feature}</span>
-                  </motion.div>
-                ))}
-              </motion.div>
+                  {activeVariant.features && activeVariant.features.length > 0 && (
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-bold text-white">Caractéristiques</h3>
+                      <AnimatePresence mode="wait">
+                        {activeVariant.features.map((f, i) => (
+                          <motion.div 
+                            key={`feat-${activeVariantId}-${i}`}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ delay: i * 0.08 }}
+                            className="flex items-center gap-3 text-slate-300">
+                            <ChevronRight className="w-5 h-5 text-teal-400 flex-shrink-0" />
+                            <span>{f}</span>
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
 
-            {/* Boutons qui montent du bas */}
-            <motion.div 
-              variants={buttonVariants}
-              initial="hidden"
-              animate="visible"
-              className="space-y-4 mt-10"
-            >
-              <Button size="lg" className="w-full h-16 rounded-2xl text-lg font-bold shadow-xl">
-                <ShoppingCart className="mr-3 w-6 h-6" />
-                Demander un devis
-              </Button>
-              <Button size="lg" variant="outline" className="w-full h-16 rounded-2xl text-lg font-bold">
-                <MessageSquare className="mr-3 w-6 h-6" />
-                Contacter un expert
-              </Button>
-            </motion.div>
-          </motion.div>
+           
+          </div>
         </motion.div>
       </div>
     </>
+  )
+}
+
+// Carousel fluide
+const InfiniteCarousel = ({ children }: { children: React.ReactNode }) => (
+  <div className="relative w-full overflow-hidden py-16">
+    <motion.div
+      className="flex gap-12 px-8"
+      animate={{ x: ["0%", "-50%"] }}
+      transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+    >
+      {children}
+      {children}
+    </motion.div>
+  </div>
+)
+
+// Section principale – style IDENTIQUE à ton exemple "Nos Services"
+export default function ProductsSection() {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref)
+
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const selectedProduct = products.find(p => p.id === selectedId)
+
+  return (
+    <section ref={ref} className="relative py-24 md:py-32 bg-gradient-to-b from-black via-slate-950 to-black" id="products">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Header EXACTEMENT comme ton exemple */}
+        <div className="text-center mb-20 md:mb-24">
+          <motion.span
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="inline-block px-5 py-2 rounded-full text-sm font-medium mb-6"
+            style={{
+              background: "hsl(187 60% 55% / 0.12)",
+              border: "1px solid hsl(187 60% 55% / 0.25)",
+              color: "hsl(187 60% 72%)",
+            }}
+          >
+            Nos Produits
+          </motion.span>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 25 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
+          >
+            <span className="text-white">Solutions complètes </span>
+            <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+              pour votre bien-être
+            </span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 25 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed"
+          >
+            Découvrez notre gamme d'équipements médicaux et de solutions de suivi adaptées à chaque besoin de santé.
+          </motion.p>
+        </div>
+      </div>
+
+      {/* Carousel */}
+      <InfiniteCarousel>
+        {products.map(product => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            onClick={() => setSelectedId(product.id)}
+          />
+        ))}
+      </InfiniteCarousel>
+
+      <AnimatePresence>
+        {selectedId && selectedProduct && (
+          <ProductDetailModal product={selectedProduct} onClose={() => setSelectedId(null)} />
+        )}
+      </AnimatePresence>
+    </section>
   )
 }
