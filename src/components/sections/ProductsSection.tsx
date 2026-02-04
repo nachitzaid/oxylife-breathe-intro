@@ -32,11 +32,11 @@ const useInView = (ref: React.RefObject<HTMLElement>) => {
 }
 
 // ============ PRODUCT CARD - OPTIMISÉE MOBILE ============
-const ProductCard = ({ 
-  product, 
+const ProductCard = ({
+  product,
   onClick,
-  isMobileDevice 
-}: { 
+  isMobileDevice
+}: {
   product: Product
   onClick: () => void
   isMobileDevice: boolean
@@ -44,14 +44,13 @@ const ProductCard = ({
   return (
     <motion.div
       onClick={onClick}
-      className={`group relative cursor-pointer overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-950 to-slate-900 border border-slate-800/50 shadow-2xl flex-shrink-0 ${
-        isMobileDevice 
-          ? 'h-[360px] w-[280px] sm:h-[420px] sm:w-[340px]' 
+      className={`group relative cursor-pointer overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-950 to-slate-900 border border-slate-800/50 shadow-2xl flex-shrink-0 ${isMobileDevice
+          ? 'h-[360px] w-[280px] sm:h-[420px] sm:w-[340px]'
           : 'h-[420px] w-[340px]'
-      }`}
+        }`}
       whileHover={isMobileDevice ? {} : { y: -8, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      transition={{ 
+      transition={{
         type: isMobileDevice ? "tween" : "spring",
         stiffness: isMobileDevice ? undefined : 280,
         damping: isMobileDevice ? undefined : 24,
@@ -62,11 +61,10 @@ const ProductCard = ({
       <img
         src={`/images/${product.variants[0].image}`}
         alt={product.title}
-        className={`absolute inset-0 h-full w-full object-cover transition-transform ${
-          isMobileDevice 
-            ? 'duration-500 group-active:scale-105' 
+        className={`absolute inset-0 h-full w-full object-cover transition-transform ${isMobileDevice
+            ? 'duration-500 group-active:scale-105'
             : 'duration-1000 group-hover:scale-110'
-        }`}
+          }`}
       />
 
       {/* Gradient overlay */}
@@ -74,20 +72,18 @@ const ProductCard = ({
 
       {/* Content */}
       <div className={`absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8`}>
-        <motion.h3 
-          className={`font-bold text-white mb-2 ${
-            isMobileDevice 
-              ? 'text-xl sm:text-2xl' 
+        <motion.h3
+          className={`font-bold text-white mb-2 ${isMobileDevice
+              ? 'text-xl sm:text-2xl'
               : 'text-3xl'
-          }`}
+            }`}
         >
           {product.title}
         </motion.h3>
-        <p className={`text-slate-300/90 line-clamp-2 ${
-          isMobileDevice 
-            ? 'text-xs sm:text-sm' 
+        <p className={`text-slate-300/90 line-clamp-2 ${isMobileDevice
+            ? 'text-xs sm:text-sm'
             : 'text-base'
-        }`}>
+          }`}>
           {product.description}
         </p>
       </div>
@@ -108,11 +104,11 @@ const ProductCard = ({
 }
 
 // ============ MODAL PRODUIT - OPTIMISÉE MOBILE ============
-const ProductDetailModal = ({ 
-  product, 
+const ProductDetailModal = ({
+  product,
   onClose,
-  isMobileDevice 
-}: { 
+  isMobileDevice
+}: {
   product: Product
   onClose: () => void
   isMobileDevice: boolean
@@ -136,18 +132,16 @@ const ProductDetailModal = ({
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.94, opacity: 0, y: 30 }}
           transition={{ duration: 0.3 }}
-          className={`w-full rounded-2xl sm:rounded-3xl bg-slate-950 border border-slate-800/60 shadow-2xl overflow-hidden flex flex-col lg:flex-row pointer-events-auto ${
-            isMobileDevice 
-              ? 'max-w-md sm:max-w-2xl max-h-[90vh]' 
+          className={`w-full rounded-2xl sm:rounded-3xl bg-slate-950 border border-slate-800/60 shadow-2xl overflow-hidden flex flex-col lg:flex-row pointer-events-auto ${isMobileDevice
+              ? 'max-w-md sm:max-w-2xl max-h-[90vh]'
               : 'max-w-5xl max-h-[90vh]'
-          }`}
+            }`}
         >
           {/* Image Section */}
-          <div className={`bg-slate-900/50 flex items-center justify-center relative ${
-            isMobileDevice 
-              ? 'w-full h-64 sm:h-80 lg:w-1/2 lg:h-auto lg:flex-1 lg:p-4 sm:p-6' 
+          <div className={`bg-slate-900/50 flex items-center justify-center relative ${isMobileDevice
+              ? 'w-full h-64 sm:h-80 lg:w-1/2 lg:h-auto lg:flex-1 lg:p-4 sm:p-6'
               : 'flex-1 p-8'
-          }`}>
+            }`}>
             {activeVariant && (
               <motion.img
                 key={activeVariantId}
@@ -156,35 +150,31 @@ const ProductDetailModal = ({
                 transition={{ duration: 0.3 }}
                 src={`/images/${activeVariant.image}`}
                 alt={activeVariant.title}
-                className={`object-contain ${
-                  isMobileDevice 
-                    ? 'max-h-64 sm:max-h-80' 
+                className={`object-contain ${isMobileDevice
+                    ? 'max-h-64 sm:max-h-80'
                     : 'max-h-[70vh]'
-                }`}
+                  }`}
               />
             )}
 
             {/* Thumbnails - Position adaptée */}
             {product.variants.length > 1 && (
-              <div className={`absolute flex gap-2 sm:gap-3 bg-black/60 backdrop-blur-lg rounded-lg sm:rounded-xl border border-slate-700/50 ${
-                isMobileDevice 
-                  ? 'bottom-2 left-1/2 -translate-x-1/2 p-2 sm:p-3' 
+              <div className={`absolute flex gap-2 sm:gap-3 bg-black/60 backdrop-blur-lg rounded-lg sm:rounded-xl border border-slate-700/50 ${isMobileDevice
+                  ? 'bottom-2 left-1/2 -translate-x-1/2 p-2 sm:p-3'
                   : 'bottom-6 left-1/2 -translate-x-1/2 p-4'
-              }`}>
+                }`}>
                 {product.variants.map(v => (
                   <motion.button
                     key={v.id}
                     onClick={() => setActiveVariantId(v.id)}
                     whileTap={{ scale: 0.95 }}
-                    className={`rounded-lg sm:rounded-xl overflow-hidden border-2 flex-shrink-0 ${
-                      v.id === activeVariantId 
-                        ? 'border-cyan-500 shadow-cyan-500/30' 
+                    className={`rounded-lg sm:rounded-xl overflow-hidden border-2 flex-shrink-0 ${v.id === activeVariantId
+                        ? 'border-cyan-500 shadow-cyan-500/30'
                         : 'border-slate-600 opacity-60'
-                    } ${
-                      isMobileDevice 
-                        ? 'w-10 h-10 sm:w-12 sm:h-12' 
+                      } ${isMobileDevice
+                        ? 'w-10 h-10 sm:w-12 sm:h-12'
                         : 'w-16 h-16'
-                    }`}
+                      }`}
                   >
                     <img src={`/images/${v.image}`} alt="" className="w-full h-full object-cover" />
                   </motion.button>
@@ -194,38 +184,34 @@ const ProductDetailModal = ({
           </div>
 
           {/* Info Section */}
-          <div className={`flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-800/60 relative ${
-            isMobileDevice 
-              ? 'w-full p-4 sm:p-6 lg:w-1/2' 
+          <div className={`flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-800/60 relative ${isMobileDevice
+              ? 'w-full p-4 sm:p-6 lg:w-1/2'
               : 'flex-1 p-10'
-          }`}>
+            }`}>
             {/* Close button */}
-            <button 
-              onClick={onClose} 
-              className={`absolute p-2 sm:p-3 rounded-full bg-slate-900/60 border border-slate-700/50 hover:bg-slate-800/80 transition ${
-                isMobileDevice 
-                  ? 'top-3 right-3 sm:top-4 sm:right-4' 
+            <button
+              onClick={onClose}
+              className={`absolute p-2 sm:p-3 rounded-full bg-slate-900/60 border border-slate-700/50 hover:bg-slate-800/80 transition ${isMobileDevice
+                  ? 'top-3 right-3 sm:top-4 sm:right-4'
                   : 'top-6 right-6'
-              }`}
+                }`}
             >
               <X className={`text-slate-300 ${isMobileDevice ? 'w-4 h-4 sm:w-5 sm:h-5' : 'w-6 h-6'}`} />
             </button>
 
             {/* Content - Scroll optimisé */}
-            <div className={`overflow-y-auto space-y-4 sm:space-y-6 ${
-              isMobileDevice 
-                ? 'max-h-[calc(90vh-180px)]' 
+            <div className={`overflow-y-auto space-y-4 sm:space-y-6 ${isMobileDevice
+                ? 'max-h-[calc(90vh-180px)]'
                 : 'max-h-[calc(90vh-160px)]'
-            }`}>
+              }`}>
               {activeVariant && (
                 <>
                   {/* Header */}
                   <div className="pr-8">
-                    <span className={`inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full font-medium ${
-                      isMobileDevice 
-                        ? 'text-xs sm:text-sm' 
+                    <span className={`inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full font-medium ${isMobileDevice
+                        ? 'text-xs sm:text-sm'
                         : 'text-sm'
-                    }`}
+                      }`}
                       style={{
                         background: "hsl(187 60% 55% / 0.12)",
                         border: "1px solid hsl(187 60% 55% / 0.25)",
@@ -233,32 +219,29 @@ const ProductDetailModal = ({
                       }}>
                       Modèle sélectionné
                     </span>
-                    <h2 className={`font-bold text-white leading-tight mt-2 sm:mt-3 ${
-                      isMobileDevice 
-                        ? 'text-lg sm:text-2xl' 
+                    <h2 className={`font-bold text-white leading-tight mt-2 sm:mt-3 ${isMobileDevice
+                        ? 'text-lg sm:text-2xl'
                         : 'text-4xl md:text-5xl'
-                    }`}>
+                      }`}>
                       {activeVariant.title}
                     </h2>
                   </div>
 
                   {/* Description */}
-                  <p className={`text-slate-300 leading-relaxed ${
-                    isMobileDevice 
-                      ? 'text-xs sm:text-sm' 
+                  <p className={`text-slate-300 leading-relaxed ${isMobileDevice
+                      ? 'text-xs sm:text-sm'
                       : 'text-lg'
-                  }`}>
+                    }`}>
                     {activeVariant.description}
                   </p>
 
                   {/* Features */}
                   {activeVariant.features && activeVariant.features.length > 0 && (
                     <div className="space-y-3">
-                      <h3 className={`font-bold text-white ${
-                        isMobileDevice 
-                          ? 'text-base sm:text-lg' 
+                      <h3 className={`font-bold text-white ${isMobileDevice
+                          ? 'text-base sm:text-lg'
                           : 'text-xl'
-                      }`}>
+                        }`}>
                         Caractéristiques
                       </h3>
                       <AnimatePresence mode="wait">
@@ -271,11 +254,10 @@ const ProductDetailModal = ({
                             transition={{ delay: i * 0.03 }}
                             className="flex items-start gap-2 sm:gap-3 text-slate-300"
                           >
-                            <ChevronRight className={`text-cyan-400 flex-shrink-0 mt-0.5 ${
-                              isMobileDevice 
-                                ? 'w-4 h-4' 
+                            <ChevronRight className={`text-cyan-400 flex-shrink-0 mt-0.5 ${isMobileDevice
+                                ? 'w-4 h-4'
                                 : 'w-5 h-5'
-                            }`} />
+                              }`} />
                             <span className={isMobileDevice ? 'text-xs sm:text-sm' : 'text-sm'}>
                               {f}
                             </span>
@@ -306,33 +288,42 @@ const ProductDetailModal = ({
   )
 }
 
-// ============ CAROUSEL OPTIMISÉ MOBILE ============
-const InfiniteCarousel = ({ 
+const InfiniteCarousel = ({
   children,
-  isMobileDevice 
-}: { 
+  isMobileDevice
+}: {
   children: React.ReactNode
   isMobileDevice: boolean
 }) => {
   return (
-    <div className={`relative w-full overflow-hidden ${isMobileDevice ? 'py-8 sm:py-12' : 'py-16'}`}>
-      <motion.div
-        className={`flex gap-4 sm:gap-8 px-4 sm:px-8 ${isMobileDevice ? 'justify-start' : ''}`}
-        animate={isMobileDevice ? {} : { x: ["0%", "-50%"] }}
-        transition={{ 
-          duration: isMobileDevice ? 0 : 40,
-          repeat: isMobileDevice ? 0 : Infinity,
-          ease: "linear" 
-        }}
-      >
-        {children}
-        {!isMobileDevice && children}
-      </motion.div>
+    <div className={`relative w-full ${isMobileDevice ? 'py-8 sm:py-12' : 'py-16'}`}>
+      {/* Mobile: Scrollable container */}
+      {isMobileDevice ? (
+        <div className="overflow-x-auto overflow-y-hidden scrollbar-hide px-4 sm:px-8">
+          <div className="flex gap-4 sm:gap-8 pb-4">
+            {children}
+          </div>
+        </div>
+      ) : (
+        /* Desktop: Infinite animation */
+        <motion.div
+          className="flex gap-8 px-8 overflow-hidden"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{
+            duration: 40,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        >
+          {children}
+          {children}
+        </motion.div>
+      )}
 
       {/* Hint text pour mobile */}
       {isMobileDevice && (
         <p className="text-center text-xs text-gray-500 mt-4">
-          Glissez pour voir plus
+          Glissez pour voir plus →
         </p>
       )}
     </div>
@@ -363,9 +354,9 @@ export default function ProductsSection() {
   }, [])
 
   return (
-    <section 
-      ref={ref} 
-      className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-to-b from-black via-slate-950 to-black" 
+    <section
+      ref={ref}
+      className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-to-b from-black via-slate-950 to-black"
       id="products"
     >
       <div className="relative z-10 max-w-7xl mx-auto">
@@ -375,9 +366,8 @@ export default function ProductsSection() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.1, duration: 0.5 }}
-            className={`inline-block px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium mb-4 sm:mb-6 ${
-              isSmall ? 'text-xs' : 'text-sm'
-            }`}
+            className={`inline-block px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-medium mb-4 sm:mb-6 ${isSmall ? 'text-xs' : 'text-sm'
+              }`}
             style={{
               background: "hsl(187 60% 55% / 0.12)",
               border: "1px solid hsl(187 60% 55% / 0.25)",
@@ -391,11 +381,10 @@ export default function ProductsSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className={`font-bold mb-4 sm:mb-6 leading-tight ${
-              isSmall 
-                ? 'text-2xl sm:text-3xl' 
+            className={`font-bold mb-4 sm:mb-6 leading-tight ${isSmall
+                ? 'text-2xl sm:text-3xl'
                 : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl'
-            }`}
+              }`}
           >
             <span className="text-white">Solutions complètes</span>
             <span className="block bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
@@ -407,11 +396,10 @@ export default function ProductsSection() {
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className={`text-slate-400 max-w-2xl mx-auto leading-relaxed ${
-              isSmall 
-                ? 'text-xs sm:text-sm' 
+            className={`text-slate-400 max-w-2xl mx-auto leading-relaxed ${isSmall
+                ? 'text-xs sm:text-sm'
                 : 'text-base sm:text-lg md:text-xl'
-            }`}
+              }`}
           >
             Découvrez notre gamme d'équipements médicaux et de solutions de suivi adaptées à chaque besoin de santé.
           </motion.p>
@@ -439,8 +427,8 @@ export default function ProductsSection() {
       {/* Modal */}
       <AnimatePresence>
         {selectedId && selectedProduct && (
-          <ProductDetailModal 
-            product={selectedProduct} 
+          <ProductDetailModal
+            product={selectedProduct}
             onClose={() => setSelectedId(null)}
             isMobileDevice={isMobileDevice}
           />
