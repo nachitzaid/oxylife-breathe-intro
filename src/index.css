@@ -47,13 +47,13 @@
     --mist: 210 30% 85%;
     --deep-navy: 220 30% 4%;
     --healing-blue: 200 60% 50%;
-    
+
     /* Gradients */
     --gradient-breath: linear-gradient(135deg, hsl(187 60% 55%), hsl(200 60% 50%));
     --gradient-danger: linear-gradient(135deg, hsl(0 65% 55%), hsl(30 70% 50%));
     --gradient-calm: linear-gradient(180deg, hsl(220 25% 6%), hsl(220 30% 12%));
     --gradient-mist: radial-gradient(ellipse at center, hsl(210 30% 85% / 0.1), transparent 70%);
-    
+
     /* Shadows */
     --shadow-breath: 0 0 60px hsl(187 80% 60% / 0.3);
     --shadow-danger: 0 0 40px hsl(0 70% 60% / 0.4);
@@ -86,6 +86,7 @@
 }
 
 @layer components {
+
   /* Breathing animation classes */
   .breath-text {
     @apply text-foreground/90;
@@ -97,11 +98,10 @@
   }
 
   .danger-flash {
-    background: linear-gradient(90deg, 
-      transparent 0%, 
-      hsl(var(--danger) / 0.15) 50%, 
-      transparent 100%
-    );
+    background: linear-gradient(90deg,
+        transparent 0%,
+        hsl(var(--danger) / 0.15) 50%,
+        transparent 100%);
   }
 
   .ecg-line {
@@ -153,10 +153,13 @@
 
 /* Keyframes */
 @keyframes breathPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.6;
   }
+
   50% {
     transform: scale(1.05);
     opacity: 1;
@@ -164,15 +167,20 @@
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0) translateX(0);
   }
+
   25% {
     transform: translateY(-20px) translateX(10px);
   }
+
   50% {
     transform: translateY(-10px) translateX(-5px);
   }
+
   75% {
     transform: translateY(-25px) translateX(5px);
   }
@@ -183,9 +191,11 @@
     transform: translateX(-100%) scale(1.2);
     opacity: 0;
   }
+
   50% {
     opacity: 0.3;
   }
+
   100% {
     transform: translateX(100%) scale(1.2);
     opacity: 0;
@@ -196,6 +206,7 @@
   0% {
     stroke-dashoffset: 1000;
   }
+
   100% {
     stroke-dashoffset: 0;
   }
@@ -217,4 +228,95 @@
 /* Styles pour les caractères animés des titres */
 .gsap-char {
   will-change: transform, opacity;
+}
+
+/* ============================================ */
+/* MOBILE PERFORMANCE OPTIMIZATIONS */
+/* ============================================ */
+
+/* Performance hints */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Tablet optimization - Reduce heavy effects */
+@media (max-width: 1024px) {
+
+  /* Reduce blur intensity */
+  [style*="blur(80px)"] {
+    filter: blur(40px) !important;
+  }
+
+  [style*="blur(100px)"] {
+    filter: blur(50px) !important;
+  }
+
+  /* Reduce glow effects */
+  .shadow-breath {
+    box-shadow: 0 0 30px hsl(187 80% 60% / 0.2) !important;
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 50px hsl(187 60% 55% / 0.15) !important;
+  }
+}
+
+/* Mobile optimization - Disable/simplify heavy effects */
+@media (max-width: 640px) {
+
+  /* Disable complex animations */
+  [class*="animate-"] {
+    animation-duration: 0.5s !important;
+  }
+
+  /* Minimize blur effects */
+  [style*="blur"] {
+    filter: blur(20px) !important;
+  }
+
+  /* Reduce shadows */
+  [class*="shadow"] {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Simplify particle effects */
+  .particle {
+    filter: blur(0.5px);
+  }
+
+  /* Reduce glow effects */
+  .lung-glow {
+    filter: drop-shadow(0 0 20px hsl(var(--breath-glow) / 0.3));
+  }
+
+  .breath-text {
+    text-shadow: 0 0 15px hsl(var(--breath-glow) / 0.3);
+  }
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .breath-pulse,
+  [class*="animate-"] {
+    animation: none !important;
+  }
 }

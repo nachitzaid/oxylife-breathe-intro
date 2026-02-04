@@ -50,12 +50,11 @@ const AboutSection = () => {
       {/* Background decoration */}
       <div className="absolute inset-0">
         <motion.div
-          className="absolute w-[800px] h-[800px] rounded-full"
+          className="absolute w-[800px] h-[800px] rounded-full blur-[40px] md:blur-[80px]"
           style={{
             background: 'radial-gradient(circle, hsl(187 60% 55% / 0.03), transparent 50%)',
             bottom: '-30%',
             left: '-20%',
-            filter: 'blur(80px)',
           }}
           animate={{
             scale: [1, 1.2, 1],
@@ -90,7 +89,7 @@ const AboutSection = () => {
                         <stop offset="100%" stopColor="hsl(200, 60%, 45%)" />
                       </linearGradient>
                     </defs>
-                    
+
                     {/* Left lung */}
                     <motion.path
                       d="M70 50 C40 60, 30 90, 35 120 C40 145, 55 155, 70 150 C82 147, 85 135, 85 120 L85 60 C85 52, 78 48, 70 50Z"
@@ -101,7 +100,7 @@ const AboutSection = () => {
                       transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                       style={{ transformOrigin: 'center' }}
                     />
-                    
+
                     {/* Right lung */}
                     <motion.path
                       d="M130 50 C160 60, 170 90, 165 120 C160 145, 145 155, 130 150 C118 147, 115 135, 115 120 L115 60 C115 52, 122 48, 130 50Z"
@@ -112,7 +111,7 @@ const AboutSection = () => {
                       transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
                       style={{ transformOrigin: 'center' }}
                     />
-                    
+
                     {/* Trachea */}
                     <motion.path
                       d="M100 25 L100 55 C100 60, 85 60, 85 55 M100 55 C100 60, 115 60, 115 55"
@@ -121,7 +120,7 @@ const AboutSection = () => {
                       strokeWidth="3"
                       strokeLinecap="round"
                     />
-                    
+
                     {/* Air flow particles */}
                     {[0, 1, 2, 3, 4].map((i) => (
                       <motion.circle
