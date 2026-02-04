@@ -45,8 +45,8 @@ const ProductCard = ({
     <motion.div
       onClick={onClick}
       className={`group relative cursor-pointer overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-950 to-slate-900 border border-slate-800/50 shadow-2xl flex-shrink-0 ${isMobileDevice
-          ? 'h-[360px] w-[280px] sm:h-[420px] sm:w-[340px]'
-          : 'h-[420px] w-[340px]'
+        ? 'h-[360px] w-[280px] sm:h-[420px] sm:w-[340px]'
+        : 'h-[420px] w-[340px]'
         }`}
       whileHover={isMobileDevice ? {} : { y: -8, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
@@ -62,8 +62,8 @@ const ProductCard = ({
         src={`/images/${product.variants[0].image}`}
         alt={product.title}
         className={`absolute inset-0 h-full w-full object-cover transition-transform ${isMobileDevice
-            ? 'duration-500 group-active:scale-105'
-            : 'duration-1000 group-hover:scale-110'
+          ? 'duration-500 group-active:scale-105'
+          : 'duration-1000 group-hover:scale-110'
           }`}
       />
 
@@ -74,15 +74,15 @@ const ProductCard = ({
       <div className={`absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8`}>
         <motion.h3
           className={`font-bold text-white mb-2 ${isMobileDevice
-              ? 'text-xl sm:text-2xl'
-              : 'text-3xl'
+            ? 'text-xl sm:text-2xl'
+            : 'text-3xl'
             }`}
         >
           {product.title}
         </motion.h3>
         <p className={`text-slate-300/90 line-clamp-2 ${isMobileDevice
-            ? 'text-xs sm:text-sm'
-            : 'text-base'
+          ? 'text-xs sm:text-sm'
+          : 'text-base'
           }`}>
           {product.description}
         </p>
@@ -132,15 +132,15 @@ const ProductDetailModal = ({
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.94, opacity: 0, y: 30 }}
           transition={{ duration: 0.3 }}
-          className={`w-full rounded-2xl sm:rounded-3xl bg-slate-950 border border-slate-800/60 shadow-2xl overflow-hidden flex flex-col lg:flex-row pointer-events-auto ${isMobileDevice
-              ? 'max-w-md sm:max-w-2xl max-h-[90vh]'
-              : 'max-w-5xl max-h-[90vh]'
+          className={`w-full rounded-2xl sm:rounded-3xl bg-slate-950 border border-slate-800/60 shadow-2xl overflow-hidden flex flex-col lg:flex-row pointer-events-auto my-auto ${isMobileDevice
+            ? 'max-w-md sm:max-w-2xl max-h-[85vh]'
+            : 'max-w-5xl max-h-[90vh]'
             }`}
         >
           {/* Image Section */}
           <div className={`bg-slate-900/50 flex items-center justify-center relative ${isMobileDevice
-              ? 'w-full h-64 sm:h-80 lg:w-1/2 lg:h-auto lg:flex-1 lg:p-4 sm:p-6'
-              : 'flex-1 p-8'
+            ? 'w-full h-64 sm:h-80 lg:w-1/2 lg:h-auto lg:flex-1 lg:p-4 sm:p-6'
+            : 'flex-1 p-8'
             }`}>
             {activeVariant && (
               <motion.img
@@ -151,8 +151,8 @@ const ProductDetailModal = ({
                 src={`/images/${activeVariant.image}`}
                 alt={activeVariant.title}
                 className={`object-contain ${isMobileDevice
-                    ? 'max-h-64 sm:max-h-80'
-                    : 'max-h-[70vh]'
+                  ? 'max-h-64 sm:max-h-80'
+                  : 'max-h-[70vh]'
                   }`}
               />
             )}
@@ -160,8 +160,8 @@ const ProductDetailModal = ({
             {/* Thumbnails - Position adaptée */}
             {product.variants.length > 1 && (
               <div className={`absolute flex gap-2 sm:gap-3 bg-black/60 backdrop-blur-lg rounded-lg sm:rounded-xl border border-slate-700/50 ${isMobileDevice
-                  ? 'bottom-2 left-1/2 -translate-x-1/2 p-2 sm:p-3'
-                  : 'bottom-6 left-1/2 -translate-x-1/2 p-4'
+                ? 'bottom-2 left-1/2 -translate-x-1/2 p-2 sm:p-3'
+                : 'bottom-6 left-1/2 -translate-x-1/2 p-4'
                 }`}>
                 {product.variants.map(v => (
                   <motion.button
@@ -169,8 +169,8 @@ const ProductDetailModal = ({
                     onClick={() => setActiveVariantId(v.id)}
                     whileTap={{ scale: 0.95 }}
                     className={`rounded-lg sm:rounded-xl overflow-hidden border-2 flex-shrink-0 ${v.id === activeVariantId
-                        ? 'border-cyan-500 shadow-cyan-500/30'
-                        : 'border-slate-600 opacity-60'
+                      ? 'border-cyan-500 shadow-cyan-500/30'
+                      : 'border-slate-600 opacity-60'
                       } ${isMobileDevice
                         ? 'w-10 h-10 sm:w-12 sm:h-12'
                         : 'w-16 h-16'
@@ -185,15 +185,15 @@ const ProductDetailModal = ({
 
           {/* Info Section */}
           <div className={`flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-800/60 relative ${isMobileDevice
-              ? 'w-full p-4 sm:p-6 lg:w-1/2'
-              : 'flex-1 p-10'
+            ? 'w-full p-4 sm:p-6 lg:w-1/2'
+            : 'flex-1 p-10'
             }`}>
             {/* Close button */}
             <button
               onClick={onClose}
               className={`absolute p-2 sm:p-3 rounded-full bg-slate-900/60 border border-slate-700/50 hover:bg-slate-800/80 transition ${isMobileDevice
-                  ? 'top-3 right-3 sm:top-4 sm:right-4'
-                  : 'top-6 right-6'
+                ? 'top-3 right-3 sm:top-4 sm:right-4'
+                : 'top-6 right-6'
                 }`}
             >
               <X className={`text-slate-300 ${isMobileDevice ? 'w-4 h-4 sm:w-5 sm:h-5' : 'w-6 h-6'}`} />
@@ -201,7 +201,7 @@ const ProductDetailModal = ({
 
             {/* Content - Scroll optimisé */}
             <div className={`overflow-y-auto space-y-4 sm:space-y-6 ${isMobileDevice
-                ? 'max-h-[calc(90vh-180px)]'
+                ? 'max-h-[calc(85vh-220px)] sm:max-h-[calc(85vh-200px)]'
                 : 'max-h-[calc(90vh-160px)]'
               }`}>
               {activeVariant && (
@@ -209,8 +209,8 @@ const ProductDetailModal = ({
                   {/* Header */}
                   <div className="pr-8">
                     <span className={`inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full font-medium ${isMobileDevice
-                        ? 'text-xs sm:text-sm'
-                        : 'text-sm'
+                      ? 'text-xs sm:text-sm'
+                      : 'text-sm'
                       }`}
                       style={{
                         background: "hsl(187 60% 55% / 0.12)",
@@ -220,8 +220,8 @@ const ProductDetailModal = ({
                       Modèle sélectionné
                     </span>
                     <h2 className={`font-bold text-white leading-tight mt-2 sm:mt-3 ${isMobileDevice
-                        ? 'text-lg sm:text-2xl'
-                        : 'text-4xl md:text-5xl'
+                      ? 'text-lg sm:text-2xl'
+                      : 'text-4xl md:text-5xl'
                       }`}>
                       {activeVariant.title}
                     </h2>
@@ -229,8 +229,8 @@ const ProductDetailModal = ({
 
                   {/* Description */}
                   <p className={`text-slate-300 leading-relaxed ${isMobileDevice
-                      ? 'text-xs sm:text-sm'
-                      : 'text-lg'
+                    ? 'text-xs sm:text-sm'
+                    : 'text-lg'
                     }`}>
                     {activeVariant.description}
                   </p>
@@ -239,8 +239,8 @@ const ProductDetailModal = ({
                   {activeVariant.features && activeVariant.features.length > 0 && (
                     <div className="space-y-3">
                       <h3 className={`font-bold text-white ${isMobileDevice
-                          ? 'text-base sm:text-lg'
-                          : 'text-xl'
+                        ? 'text-base sm:text-lg'
+                        : 'text-xl'
                         }`}>
                         Caractéristiques
                       </h3>
@@ -255,8 +255,8 @@ const ProductDetailModal = ({
                             className="flex items-start gap-2 sm:gap-3 text-slate-300"
                           >
                             <ChevronRight className={`text-cyan-400 flex-shrink-0 mt-0.5 ${isMobileDevice
-                                ? 'w-4 h-4'
-                                : 'w-5 h-5'
+                              ? 'w-4 h-4'
+                              : 'w-5 h-5'
                               }`} />
                             <span className={isMobileDevice ? 'text-xs sm:text-sm' : 'text-sm'}>
                               {f}
@@ -382,8 +382,8 @@ export default function ProductsSection() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2, duration: 0.6 }}
             className={`font-bold mb-4 sm:mb-6 leading-tight ${isSmall
-                ? 'text-2xl sm:text-3xl'
-                : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl'
+              ? 'text-2xl sm:text-3xl'
+              : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl'
               }`}
           >
             <span className="text-white">Solutions complètes</span>
@@ -397,8 +397,8 @@ export default function ProductsSection() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3, duration: 0.6 }}
             className={`text-slate-400 max-w-2xl mx-auto leading-relaxed ${isSmall
-                ? 'text-xs sm:text-sm'
-                : 'text-base sm:text-lg md:text-xl'
+              ? 'text-xs sm:text-sm'
+              : 'text-base sm:text-lg md:text-xl'
               }`}
           >
             Découvrez notre gamme d'équipements médicaux et de solutions de suivi adaptées à chaque besoin de santé.
