@@ -40,13 +40,12 @@ const ContactSection = () => {
       {/* Background decoration */}
       <div className="absolute inset-0">
         <motion.div
-          className="absolute w-[800px] h-[800px] rounded-full"
+          className="absolute w-[800px] h-[800px] rounded-full blur-[40px] md:blur-[80px]"
           style={{
             background: 'radial-gradient(circle, hsl(187 60% 55% / 0.06), transparent 60%)',
             top: '-30%',
             left: '50%',
             transform: 'translateX(-50%)',
-            filter: 'blur(80px)',
           }}
           animate={{
             scale: [1, 1.15, 1],

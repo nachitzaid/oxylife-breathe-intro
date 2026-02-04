@@ -1,5 +1,5 @@
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 // Icon components using inline SVG
 const InstallIcon = () => (
@@ -104,21 +104,38 @@ const services = [
   },
 ];
 
+// ============ DÉTECTION MOBILE ============
+const isMobile = () => {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth < 768;
+};
+
 const ServicesSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+  const [isMobileDevice, setIsMobileDevice] = useState(false);
+
+  useEffect(() => {
+    setIsMobileDevice(isMobile());
+
+    const handleResize = () => {
+      setIsMobileDevice(isMobile());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <section ref={containerRef} className="py-32 px-6 relative overflow-hidden" id="services">
       {/* Background decoration */}
       <div className="absolute inset-0">
         <motion.div
-          className="absolute w-[500px] h-[500px] rounded-full"
+          className="absolute w-[500px] h-[500px] rounded-full blur-[30px] md:blur-[60px]"
           style={{
             background: 'radial-gradient(circle, hsl(187 60% 55% / 0.05), transparent 60%)',
             top: '20%',
             right: '-10%',
-            filter: 'blur(60px)',
           }}
           animate={{
             scale: [1, 1.2, 1],
@@ -183,9 +200,8 @@ const ServicesSection = () => {
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
                 transition={{ delay: index * 0.1, duration: 0.6 }}
-                whileHover={{
-                  y: -10,
-                }}
+                whileHover={isMobileDevice ? {} : { y: -10 }}
+                whileTap={{ scale: 0.98 }}
                 className="h-full p-8 rounded-3xl transition-all duration-500 group cursor-pointer relative overflow-hidden"
                 style={{
                   background: 'linear-gradient(145deg, hsl(220 25% 10%), hsl(220 25% 8%))',
@@ -208,16 +224,16 @@ const ServicesSection = () => {
                     background: service.lightColor,
                     border: `2px solid ${service.shadowColor}40`,
                   }}
-                  whileHover={{
+                  whileHover={isMobileDevice ? {} : {
                     scale: 1.15,
                     rotate: 10,
                   }}
-                  animate={{
+                  animate={isMobileDevice ? {} : {
                     y: [0, -8, 0],
                   }}
                   transition={{
                     duration: 3,
-                    repeat: Infinity,
+                    repeat: isMobileDevice ? 0 : Infinity,
                     ease: 'easeInOut',
                     delay: index * 0.2,
                   }}

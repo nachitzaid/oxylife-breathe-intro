@@ -94,13 +94,12 @@ const StatsSection = () => {
 
       {/* Glowing orbs */}
       <motion.div
-        className="absolute w-[600px] h-[600px] rounded-full"
+        className="absolute w-[600px] h-[600px] rounded-full blur-[40px] md:blur-[80px]"
         style={{
           background: 'radial-gradient(circle, hsl(187 80% 50% / 0.08), transparent 50%)',
           top: '-20%',
           left: '50%',
           transform: 'translateX(-50%)',
-          filter: 'blur(80px)',
         }}
         animate={{ scale: [1, 1.2, 1] }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}

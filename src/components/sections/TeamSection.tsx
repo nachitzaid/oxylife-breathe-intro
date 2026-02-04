@@ -36,12 +36,11 @@ const TeamSection = () => {
       {/* Background decoration */}
       <div className="absolute inset-0">
         <motion.div
-          className="absolute w-[600px] h-[600px] rounded-full"
+          className="absolute w-[600px] h-[600px] rounded-full blur-[30px] md:blur-[60px]"
           style={{
             background: 'radial-gradient(circle, hsl(187 60% 55% / 0.05), transparent 60%)',
             bottom: '-20%',
             right: '-10%',
-            filter: 'blur(60px)',
           }}
           animate={{
             scale: [1, 1.2, 1],

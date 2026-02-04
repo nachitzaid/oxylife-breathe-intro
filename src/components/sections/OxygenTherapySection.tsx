@@ -30,12 +30,11 @@ const OxygenTherapySection = () => {
       {/* Background decoration */}
       <div className="absolute inset-0">
         <motion.div
-          className="absolute w-[700px] h-[700px] rounded-full"
+          className="absolute w-[700px] h-[700px] rounded-full blur-[35px] md:blur-[70px]"
           style={{
             background: 'radial-gradient(circle, hsl(187 60% 55% / 0.08), transparent 60%)',
             top: '10%',
             left: '-15%',
-            filter: 'blur(70px)',
           }}
           animate={{
             scale: [1, 1.15, 1],
@@ -174,7 +173,7 @@ const OxygenTherapySection = () => {
             </h3>
 
             <p className="text-muted-foreground font-outfit max-w-2xl">
-              Notre équipe technique vous accompagne dans votre traitement avec des solutions 
+              Notre équipe technique vous accompagne dans votre traitement avec des solutions
               adaptées à vos besoins spécifiques.
             </p>
           </div>
