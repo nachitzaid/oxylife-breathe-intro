@@ -201,8 +201,8 @@ const ProductDetailModal = ({
 
             {/* Content - Scroll optimisé */}
             <div className={`overflow-y-auto space-y-4 sm:space-y-6 ${isMobileDevice
-                ? 'max-h-[calc(85vh-220px)] sm:max-h-[calc(85vh-200px)]'
-                : 'max-h-[calc(90vh-160px)]'
+              ? 'max-h-[calc(85vh-220px)] sm:max-h-[calc(85vh-200px)]'
+              : 'max-h-[calc(90vh-160px)]'
               }`}>
               {activeVariant && (
                 <>
@@ -295,6 +295,8 @@ const InfiniteCarousel = ({
   children: React.ReactNode
   isMobileDevice: boolean
 }) => {
+  const [isPaused, setIsPaused] = useState(false);
+
   return (
     <div className={`relative w-full ${isMobileDevice ? 'py-8 sm:py-12' : 'py-16'}`}>
       {/* Mobile: Scrollable container */}
@@ -305,19 +307,27 @@ const InfiniteCarousel = ({
           </div>
         </div>
       ) : (
-        /* Desktop: Infinite animation */
-        <motion.div
-          className="flex gap-8 px-8 overflow-hidden"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{
-            duration: 40,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        >
-          {children}
-          {children}
-        </motion.div>
+        /* Desktop: Infinite animation with enhancements */
+        <div className="relative overflow-hidden group">
+          {/* Side Masks for smooth fading */}
+          <div className="absolute inset-y-0 left-0 w-40 z-20 bg-gradient-to-r from-black via-black/80 to-transparent pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-40 z-20 bg-gradient-to-l from-black via-black/80 to-transparent pointer-events-none" />
+
+          <motion.div
+            className="flex gap-8 px-8 w-max"
+            animate={isPaused ? {} : { x: ["0%", "-50%"] }}
+            transition={{
+              duration: 35, // Adjusted speed for premium feel
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            {children}
+            {children}
+          </motion.div>
+        </div>
       )}
 
       {/* Hint text pour mobile */}

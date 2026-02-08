@@ -25,13 +25,13 @@ const HeroSection = () => {
   const particlesRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
-  
+
   const { t } = useLanguage();
   const [logoAnimationComplete, setLogoAnimationComplete] = useState(false);
   const [showParticles, setShowParticles] = useState(false);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
   const [isSmall, setIsSmall] = useState(false);
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start'],
@@ -53,7 +53,7 @@ const HeroSection = () => {
   useEffect(() => {
     setIsMobileDevice(isMobile());
     setIsSmall(isSmallMobile());
-    
+
     const handleResize = () => {
       setIsMobileDevice(isMobile());
       setIsSmall(isSmallMobile());
@@ -94,14 +94,14 @@ const HeroSection = () => {
       opacity: 0,
       filter: 'blur(20px)',
     })
-    .set(glowRef.current, {
-      scale: 0,
-      opacity: 0,
-    })
-    .set(contentRef.current, {
-      opacity: 0,
-      y: 30,
-    });
+      .set(glowRef.current, {
+        scale: 0,
+        opacity: 0,
+      })
+      .set(contentRef.current, {
+        opacity: 0,
+        y: 30,
+      });
 
     // Phase 1: Logo falls from sky (adapté mobile)
     tl.to(logoRef.current, {
@@ -113,84 +113,84 @@ const HeroSection = () => {
       duration: animationConfig.fallDuration,
       ease: 'power4.out',
     })
-    
-    // Phase 2: Bounce impact (réduit sur mobile)
-    .to(logoRef.current, {
-      y: -50,
-      scale: animationConfig.bounceScale,
-      rotation: 10,
-      duration: 0.1,
-      ease: 'power2.out',
-    })
-    .to(logoRef.current, {
-      y: 10,
-      scale: 0.95,
-      rotation: -5,
-      duration: 0.15,
-      ease: 'bounce.out',
-    }, '-=0.05')
-    
-    // Phase 3: Small bounces (réduits sur mobile)
-    .to(logoRef.current, {
-      y: -8,
-      scale: 1.03,
-      rotation: 3,
-      duration: 0.1,
-      ease: 'power2.out',
-    })
-    .to(logoRef.current, {
-      y: 2,
-      scale: 0.98,
-      rotation: -2,
-      duration: 0.1,
-      ease: 'bounce.out',
-    }, '-=0.05')
-    
-    // Phase 4: Settle (plus rapide)
-    .to(logoRef.current, {
-      y: 0,
-      scale: 1,
-      rotation: 0,
-      duration: 0.2,
-      ease: 'elastic.out(1, 0.4)',
-    })
-    
-    // Phase 5: Glow effect (réduit)
-    .to(glowRef.current, {
-      scale: animationConfig.glowScale,
-      opacity: 0.6,
-      duration: 0.15,
-      ease: 'power2.out',
-    })
-    .to(glowRef.current, {
-      scale: animationConfig.glowScale + 1,
-      opacity: 0,
-      duration: 0.2,
-      ease: 'power2.in',
-    })
-    
-    // Phase 6: Logo pulse (simplifié)
-    .to(logoRef.current, {
-      scale: 1.08,
-      filter: 'brightness(1.3) drop-shadow(0 0 40px rgba(80, 190, 204, 0.6))',
-      duration: 0.15,
-      ease: 'power2.out',
-    })
-    .call(() => setShowParticles(true))
-    .to(logoRef.current, {
-      scale: 1,
-      filter: 'brightness(1) drop-shadow(0 0 30px rgba(80, 190, 204, 0.4))',
-      duration: 0.15,
-      ease: 'power2.in',
-    })
-    
-    // Phase 7: Content fade (plus rapide)
-    .to(contentRef.current, {
-      opacity: 1,
-      y: 0,
-      duration: 0.5,
-      ease: 'power2.out',
-    }, '-=0.1');
+
+      // Phase 2: Bounce impact (réduit sur mobile)
+      .to(logoRef.current, {
+        y: -50,
+        scale: animationConfig.bounceScale,
+        rotation: 10,
+        duration: 0.1,
+        ease: 'power2.out',
+      })
+      .to(logoRef.current, {
+        y: 10,
+        scale: 0.95,
+        rotation: -5,
+        duration: 0.15,
+        ease: 'bounce.out',
+      }, '-=0.05')
+
+      // Phase 3: Small bounces (réduits sur mobile)
+      .to(logoRef.current, {
+        y: -8,
+        scale: 1.03,
+        rotation: 3,
+        duration: 0.1,
+        ease: 'power2.out',
+      })
+      .to(logoRef.current, {
+        y: 2,
+        scale: 0.98,
+        rotation: -2,
+        duration: 0.1,
+        ease: 'bounce.out',
+      }, '-=0.05')
+
+      // Phase 4: Settle (plus rapide)
+      .to(logoRef.current, {
+        y: 0,
+        scale: 1,
+        rotation: 0,
+        duration: 0.2,
+        ease: 'elastic.out(1, 0.4)',
+      })
+
+      // Phase 5: Glow effect (réduit)
+      .to(glowRef.current, {
+        scale: animationConfig.glowScale,
+        opacity: 0.6,
+        duration: 0.15,
+        ease: 'power2.out',
+      })
+      .to(glowRef.current, {
+        scale: animationConfig.glowScale + 1,
+        opacity: 0,
+        duration: 0.2,
+        ease: 'power2.in',
+      })
+
+      // Phase 6: Logo pulse (simplifié)
+      .to(logoRef.current, {
+        scale: 1.08,
+        filter: 'brightness(1.3) drop-shadow(0 0 40px rgba(80, 190, 204, 0.6))',
+        duration: 0.15,
+        ease: 'power2.out',
+      })
+      .call(() => setShowParticles(true))
+      .to(logoRef.current, {
+        scale: 1,
+        filter: 'brightness(1) drop-shadow(0 0 30px rgba(80, 190, 204, 0.4))',
+        duration: 0.15,
+        ease: 'power2.in',
+      })
+
+      // Phase 7: Content fade (plus rapide)
+      .to(contentRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        ease: 'power2.out',
+      }, '-=0.1');
 
     return () => {
       tl.kill();
@@ -200,11 +200,11 @@ const HeroSection = () => {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 overflow-hidden pt-20"
+      className={`relative min-h-screen flex flex-col items-center ${isMobileDevice ? 'justify-start pt-10' : 'justify-center pt-20'} px-4 sm:px-6 overflow-hidden`}
       id="hero"
     >
       {/* Background */}
-      <div 
+      <div
         className="absolute inset-0"
         style={{ backgroundColor: 'hsl(220 25% 6%)' }}
       />
@@ -284,16 +284,15 @@ const HeroSection = () => {
       />
 
       {/* Logo container with cinematic animation */}
-      <div className="absolute inset-0 flex items-center justify-center z-10">
+      <div className={`absolute inset-0 flex ${isMobileDevice ? 'items-start pt-24' : 'items-center'} justify-center z-10`}>
         <div
           ref={logoRef}
           className="flex flex-col items-center"
           style={{ color: 'hsl(200 20% 95%)' }}
         >
-          <OxylifeLogo 
-            className={`w-auto ${
-              isSmall ? 'h-32' : 'h-40 md:h-56 lg:h-72'
-            }`}
+          <OxylifeLogo
+            className={`w-auto ${isSmall ? 'h-24 sm:h-32' : 'h-40 md:h-56 lg:h-72'
+              }`}
             animate={logoAnimationComplete}
           />
         </div>
@@ -303,7 +302,7 @@ const HeroSection = () => {
       <motion.div
         ref={contentRef}
         style={{ y, opacity, scale }}
-        className="relative z-20 text-center max-w-5xl mx-auto mt-auto mb-16 sm:mb-20 px-4"
+        className={`relative z-20 text-center max-w-5xl mx-auto ${isMobileDevice ? 'mt-72' : 'mt-auto'} mb-16 sm:mb-20 px-4`}
       >
         {/* Floating badge - Taille adaptée mobile */}
         <motion.div
@@ -325,11 +324,10 @@ const HeroSection = () => {
 
         {/* Main headline - Responsive typography */}
         <motion.h1
-          className={`font-outfit font-bold mb-4 sm:mb-6 leading-tight ${
-            isSmall 
-              ? 'text-3xl' 
-              : 'text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl'
-          }`}
+          className={`font-outfit font-bold mb-4 sm:mb-6 leading-tight ${isSmall
+            ? 'text-3xl'
+            : 'text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl'
+            }`}
         >
           <span className="block text-foreground">Respirez</span>
           <span
@@ -348,11 +346,10 @@ const HeroSection = () => {
 
         {/* Subheadline - Responsive text */}
         <motion.p
-          className={`text-muted-foreground font-outfit font-light mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed ${
-            isSmall 
-              ? 'text-sm' 
-              : 'text-base sm:text-lg md:text-xl lg:text-2xl'
-          }`}
+          className={`text-muted-foreground font-outfit font-light mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed ${isSmall
+            ? 'text-sm'
+            : 'text-base sm:text-lg md:text-xl lg:text-2xl'
+            }`}
         >
           Solutions innovantes contre l'apnée du sommeil. CPAP, masques
           respiratoires et expertise médicale au Maroc.
@@ -360,9 +357,8 @@ const HeroSection = () => {
 
         {/* CTA Buttons - Stack sur petit mobile */}
         <motion.div
-          className={`flex ${
-            isSmall ? 'flex-col' : 'flex-col sm:flex-row'
-          } gap-3 sm:gap-4 justify-center items-center`}
+          className={`flex ${isSmall ? 'flex-col' : 'flex-col sm:flex-row'
+            } gap-3 sm:gap-4 justify-center items-center`}
         >
           <Button
             size={isSmall ? 'sm' : 'lg'}
